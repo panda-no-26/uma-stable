@@ -27,7 +27,7 @@ body{background:#0a0a0a;color:#e8eaf0;font-family:'Noto Serif JP',serif;min-heig
 .row:nth-child(even){background:#111111;}
 .row:active{background:#2a2a2a;}
 .row-num{font-family:'Montserrat',sans-serif;font-weight:800;font-size:10px;color:rgba(201,168,76,.35);width:14px;flex-shrink:0;text-align:right;}
-.row-info{flex:1;min-width:0;}
+.row-info{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;}
 .row-name{font-size:14px;font-weight:700;color:#e8eaf0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .row-sub{font-family:'Montserrat',sans-serif;font-size:8px;color:#b0c4e0;margin-top:2px;}
 .row-class{font-family:'Montserrat',sans-serif;font-size:9px;padding:2px 7px;flex-shrink:0;white-space:nowrap;display:inline-flex;align-items:center;align-self:center;}
@@ -368,8 +368,8 @@ function renderHorseList(){
           h.club+' · '+h.trainer+
         '</div>'+
       '</div>'+
-      (raceBadge?'<div style="flex-shrink:0;align-self:center;">'+raceBadge+'</div>':'')+
-      '<div class="row-class" style="color:'+cs.color+';border:'+cs.border+'">'+h.cl+'</div>'+
+      (raceBadge?'<div style="flex-shrink:0;align-self:center;display:flex;align-items:center;">'+raceBadge+'</div>':'')+
+      '<div class="row-class" style="color:'+cs.color+';border:'+cs.border+';align-self:center;">'+h.cl+'</div>'+
       '<div class="row-arrow">›</div>';
     row.onclick=function(){openHorsePanel(h);};
     list.appendChild(row);
