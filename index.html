@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Stable Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=Montserrat:wght@300;400;600;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#0a0a0a;color:#e8eaf0;font-family:'Noto Serif JP',serif;min-height:100vh;}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideUp{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.header{text-align:center;padding:32px 20px 20px;background:#0a0a0a;}
+.header-label{font-family:'Montserrat',sans-serif;font-weight:300;font-size:9px;letter-spacing:6px;color:#c9a84c;margin-bottom:10px;text-transform:uppercase;}
+.header-title{font-size:22px;font-weight:700;letter-spacing:.15em;color:#e8eaf0;}
+.header-divider{width:80px;height:1px;background:linear-gradient(90deg,transparent,#c9a84c,transparent);margin:12px auto 0;}
+.nav{display:flex;background:#071030;border-bottom:1px solid rgba(255,255,255,0.06);}
+.nav-btn{flex:1;padding:12px 4px;font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:1px;color:#5a7aaa;background:transparent;border:none;border-bottom:3px solid transparent;cursor:pointer;text-align:center;transition:all .2s;text-transform:uppercase;}
+.nav-btn.active{color:#c9a84c;border-bottom:3px solid #c9a84c;}
+.nav-btn:hover{color:#8aaad8;}
+.page{display:none;}
+.page.active{display:block;}
+.list{width:100%;max-width:480px;margin:0 auto;padding:0 0 60px;}
+.row{display:flex;align-items:center;gap:10px;padding:10px 16px;margin-bottom:1px;cursor:pointer;transition:background .15s;}
+.row:nth-child(odd){background:#1a1a1a;}
+.row:nth-child(even){background:#111111;}
+.row:active{background:#2a2a2a;}
+.row-num{font-family:'Montserrat',sans-serif;font-weight:800;font-size:10px;color:rgba(201,168,76,.35);width:14px;flex-shrink:0;text-align:right;}
+.row-info{flex:1;min-width:0;}
+.row-name{font-size:14px;font-weight:700;color:#e8eaf0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.row-sub{font-family:'Montserrat',sans-serif;font-size:8px;color:#b0c4e0;margin-top:2px;}
+.row-class{font-family:'Montserrat',sans-serif;font-size:9px;padding:2px 7px;flex-shrink:0;white-space:nowrap;display:inline-flex;align-items:center;}
+.row-arrow{color:#3a5a8a;font-size:12px;flex-shrink:0;}
+.footer-txt{text-align:center;padding:20px;font-family:'Montserrat',sans-serif;font-size:8px;letter-spacing:4px;color:rgba(100,140,200,.3);}
+.hint{text-align:center;padding:10px 0 4px;font-family:'Montserrat',sans-serif;font-size:9px;color:#5a7aaa;letter-spacing:2px;}
+.overlay{position:fixed;inset:0;z-index:100;background:rgba(0,5,20,.85);display:none;align-items:flex-end;animation:fadeIn .2s;}
+.overlay.open{display:flex;}
+.panel{background:#132040;width:100%;max-width:480px;margin:0 auto;border-top:3px solid #c9a84c;border-radius:12px 12px 0 0;padding:24px 24px 36px;max-height:85vh;overflow-y:auto;animation:slideUp .25s ease;}
+.panel-close-row{display:flex;justify-content:flex-end;margin-bottom:16px;}
+.panel-close{background:transparent;border:1px solid #2a4a7a;color:#6a8aaa;padding:4px 12px;font-size:11px;cursor:pointer;border-radius:2px;font-family:'Montserrat',sans-serif;}
+.panel-name{font-size:26px;font-weight:700;color:#e8eaf0;}
+.panel-name-en{font-family:'Montserrat',sans-serif;font-size:10px;color:#6a8aaa;letter-spacing:3px;margin-top:4px;}
+.panel-badges{margin-top:8px;display:flex;align-items:center;gap:8px;}
+.sec-label{font-family:'Montserrat',sans-serif;font-size:9px;color:#c9a84c;letter-spacing:3px;margin-bottom:10px;}
+.divider{height:1px;background:linear-gradient(90deg,rgba(201,168,76,.4),transparent);margin-bottom:18px;}
+.divider-sm{height:1px;background:linear-gradient(90deg,rgba(100,140,200,.25),transparent);margin-bottom:18px;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px 16px;margin-bottom:18px;}
+.fl{font-family:'Montserrat',sans-serif;font-size:7px;color:#6a8aaa;letter-spacing:2px;margin-bottom:2px;}
+.fv{font-size:13px;font-weight:700;color:#e8eaf0;}
+.origin-box{font-size:12px;line-height:1.9;color:rgba(232,234,240,.8);border-left:2px solid rgba(100,160,255,.3);padding-left:10px;margin-bottom:18px;}
+.note-box{font-size:11px;line-height:1.9;color:rgba(232,234,240,.55);}
+.pw-input{flex:1;background:rgba(255,255,255,.06);border:1px solid rgba(100,140,200,.3);color:#e8eaf0;padding:8px 12px;font-size:13px;border-radius:2px;outline:none;font-family:'Montserrat',sans-serif;}
+.pw-btn{background:transparent;border:1px solid rgba(201,168,76,.5);color:#c9a84c;padding:8px 14px;font-size:10px;letter-spacing:2px;cursor:pointer;border-radius:2px;font-family:'Montserrat',sans-serif;white-space:nowrap;}
+.pw-err{font-family:'Montserrat',sans-serif;font-size:10px;color:#e05050;margin-top:4px;display:none;}
+.trophy-header{text-align:center;padding:28px 20px 20px;}
+.trophy-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;padding:0 16px 60px;max-width:480px;margin:0 auto;}
+.trophy-card{background:#132040;border:1px solid rgba(100,140,200,.2);border-radius:8px;padding:16px 12px;text-align:center;cursor:pointer;animation:fadeUp 0.4s both;}
+.trophy-card:active{background:#1c2e55;}
+.trophy-cup{font-size:40px;margin-bottom:8px;}
+.trophy-race{font-size:12px;font-weight:700;color:#e8eaf0;margin-bottom:4px;line-height:1.4;}
+.trophy-horse{font-family:'Montserrat',sans-serif;font-size:9px;color:#c9a84c;letter-spacing:1px;margin-bottom:4px;}
+.trophy-date{font-family:'Montserrat',sans-serif;font-size:8px;color:#6a8aaa;}
+.grade-badge{font-family:'Montserrat',sans-serif;font-size:8px;padding:2px 8px;border-radius:10px;display:inline-block;margin-bottom:8px;}
+.g1{background:rgba(30,80,200,.3);color:#7ab4e8;border:1px solid rgba(60,120,240,.5);}
+.g2{background:rgba(160,20,40,.25);color:#e07080;border:1px solid rgba(180,40,60,.5);}
+.g3{background:rgba(20,130,80,.25);color:#6abf8a;border:1px solid rgba(40,160,100,.5);}
+.gop{background:rgba(80,100,140,.2);color:#7a8aaa;border:1px solid rgba(100,120,170,.4);}
+.trophy-add-btn{display:flex;align-items:center;justify-content:center;height:110px;border:1px dashed rgba(100,140,200,.25);border-radius:8px;color:#3a5a8a;font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:2px;cursor:pointer;background:transparent;width:100%;}
+.t-input{width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(100,140,200,.25);color:#e8eaf0;padding:9px 12px;font-size:13px;border-radius:4px;outline:none;font-family:'Noto Serif JP',serif;margin-bottom:10px;}
+.t-select{width:100%;background:#0a0a0a;border:1px solid rgba(100,140,200,.25);color:#e8eaf0;padding:9px 12px;font-size:13px;border-radius:4px;outline:none;font-family:'Montserrat',sans-serif;margin-bottom:10px;}
+.t-save-btn{width:100%;background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.4);color:#c9a84c;padding:10px;font-size:11px;letter-spacing:2px;cursor:pointer;border-radius:4px;font-family:'Montserrat',sans-serif;}
+.t-cancel-btn{width:100%;background:transparent;border:1px solid rgba(100,140,200,.25);color:#6a8aaa;padding:8px;font-size:10px;cursor:pointer;border-radius:4px;font-family:'Montserrat',sans-serif;margin-top:8px;}
+.trophy-form-wrap{grid-column:1/-1;background:#132040;border:1px solid rgba(201,168,76,.15);border-radius:8px;padding:20px;}
+.cal-day-label{font-family:'Montserrat',sans-serif;font-size:9px;color:#5a7aaa;text-align:center;padding:4px 0;letter-spacing:1px;}
+.cal-day{min-height:38px;border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:4px 2px;position:relative;cursor:default;}
+.cal-day.has-race{background:rgba(100,160,255,.1);cursor:pointer;border:1px solid rgba(100,160,255,.25);}
+.cal-day.has-race:active{background:rgba(100,160,255,.2);}
+.cal-day.today .cal-num{background:#c9a84c;color:#071030;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;}
+.cal-num{font-family:'Montserrat',sans-serif;font-size:11px;color:#c8d8f0;line-height:1;margin-bottom:2px;}
+.cal-dot{width:5px;height:5px;border-radius:50%;background:#c9a84c;margin:1px auto;}
+.cal-other .cal-num{color:#2a3a5a;}
+.sched-item{background:#fffbe6;border-left:3px solid #c9a84c;border-radius:0 4px 4px 0;padding:12px 14px;margin-bottom:8px;cursor:pointer;transition:background .15s;}
+.sched-item:active{background:#fff0a0;}
+.sched-item.past{border-left-color:#c8b870;opacity:.6;}
+.sched-date{font-family:'Montserrat',sans-serif;font-size:9px;color:#8a6a10;letter-spacing:2px;margin-bottom:4px;}
+.sched-horse{font-size:15px;font-weight:700;color:#2a2010;margin-bottom:2px;}
+.sched-info{font-family:'Montserrat',sans-serif;font-size:10px;color:#6a5a30;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-label">My Stable Portfolio</div>
+  <div class="header-title">愛 馬 一 覧</div>
+  <div class="header-divider"></div>
+</div>
+
+<nav class="nav">
+  <button class="nav-btn active" id="nav-stable" onclick="showPage('stable')">🐎 愛馬一覧</button>
+  <button class="nav-btn" id="nav-schedule" onclick="showPage('schedule')">📅 スケジュール</button>
+  <button class="nav-btn" id="nav-trophy" onclick="showPage('trophy')">🏆 トロフィー</button>
+</nav>
+
+<!-- 愛馬一覧 -->
+<div id="page-stable" class="page active">
+  <div class="hint">タップで詳細を表示</div>
+  <div class="list" id="horse-list"></div>
+  <div style="padding:0 20px 8px;max-width:480px;margin:0 auto;">
+    <span id="update-date" style="font-family:'Montserrat',sans-serif;font-size:9px;color:rgba(150,180,255,.7);letter-spacing:1px;"></span>
+  </div>
+  <div class="footer-txt">✦ HITONUCHI UMANUSHI · 2026 ✦</div>
+</div>
+
+<!-- トロフィールーム -->
+<div id="page-trophy" class="page">
+  <div class="trophy-header">
+    <div style="font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:4px;color:#c9a84c;margin-bottom:8px;">TROPHY ROOM</div>
+    <div style="font-size:20px;font-weight:700;letter-spacing:.1em;color:#e8eaf0;">ト ロ フ ィ ー ル ー ム</div>
+    <div style="width:80px;height:1px;background:linear-gradient(90deg,transparent,#c9a84c,transparent);margin:12px auto 0;"></div>
+  </div>
+  <div class="trophy-grid" id="trophy-grid"></div>
+  <div class="footer-txt">✦ HITONUCHI UMANUSHI · 2026 ✦</div>
+</div>
+
+<!-- スケジュール -->
+<div id="page-schedule" class="page">
+  <div style="text-align:center;padding:28px 20px 16px;">
+    <div style="font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:4px;color:#c9a84c;margin-bottom:8px;">RACE SCHEDULE</div>
+    <div style="font-size:20px;font-weight:700;letter-spacing:.1em;color:#e8eaf0;">出 走 ス ケ ジ ュ ー ル</div>
+    <div style="width:80px;height:1px;background:linear-gradient(90deg,transparent,#c9a84c,transparent);margin:12px auto 0;"></div>
+  </div>
+
+  <!-- カレンダー（上） -->
+  <div style="max-width:480px;margin:0 auto;padding:16px 16px 0;">
+    <div id="cal-header" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+      <button onclick="calMove(-1)" style="background:transparent;border:1px solid rgba(201,168,76,.3);color:#c9a84c;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px;">‹</button>
+      <div id="cal-title" style="font-family:'Montserrat',sans-serif;font-size:13px;letter-spacing:2px;color:#e8eaf0;font-weight:600;"></div>
+      <button onclick="calMove(1)" style="background:transparent;border:1px solid rgba(201,168,76,.3);color:#c9a84c;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:16px;">›</button>
+    </div>
+    <div id="cal-grid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:20px;"></div>
+  </div>
+
+  <!-- リスト（下） -->
+  <div style="max-width:480px;margin:0 auto;padding:0 16px;">
+    <div style="font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:3px;color:#c9a84c;margin-bottom:10px;">UPCOMING RACES</div>
+    <div id="schedule-list"></div>
+    <button onclick="toggleSchedForm()" style="width:100%;background:transparent;border:1px dashed rgba(122,138,170,.3);color:#4a5a7a;padding:14px;font-family:'Montserrat',sans-serif;font-size:10px;letter-spacing:2px;cursor:pointer;border-radius:4px;margin-top:12px;">＋ レースを追加</button>
+    <!-- 追加フォーム -->
+    <div id="sched-form" style="display:none;background:#132040;border:1px solid rgba(201,168,76,.2);border-radius:8px;padding:20px;margin-top:12px;">
+      <div style="font-family:'Montserrat',sans-serif;font-size:9px;color:#c9a84c;letter-spacing:3px;margin-bottom:14px;">ADD RACE</div>
+      <input class="t-input" id="sf-horse" placeholder="馬名">
+      <input class="t-input" id="sf-date" placeholder="日付" type="date">
+      <input class="t-input" id="sf-race" placeholder="レース名（例：東京10R シドニーT）">
+      <input class="t-input" id="sf-dist" placeholder="距離（例：芝2,000m）">
+      <input class="t-input" id="sf-jockey" placeholder="騎手">
+      <input class="t-input" id="sf-pw" type="password" placeholder="パスワード" onkeydown="if(event.key==='Enter')saveSchedule()">
+      <div id="sf-err" class="pw-err">パスワードが違います</div>
+      <button class="t-save-btn" onclick="saveSchedule()">保存する</button>
+      <button class="t-cancel-btn" onclick="toggleSchedForm()">キャンセル</button>
+    </div>
+  </div>
+
+  <div class="footer-txt">✦ HITONUCHI UMANUSHI · 2026 ✦</div>
+</div>
+
+<!-- スケジュール詳細パネル -->
+<div class="overlay" id="sched-overlay" onclick="closeSchedPanel()">
+  <div class="panel" onclick="event.stopPropagation()">
+    <div class="panel-close-row">
+      <button class="panel-close" onclick="closeSchedPanel()">✕ 閉じる</button>
+    </div>
+    <div id="sched-panel"></div>
+  </div>
+</div>
+<div class="overlay" id="horse-overlay" onclick="closeHorsePanel()">
+  <div class="panel" onclick="event.stopPropagation()">
+    <div class="panel-close-row">
+      <button class="panel-close" onclick="closeHorsePanel()">✕ 閉じる</button>
+    </div>
+    <div id="horse-panel"></div>
+  </div>
+</div>
+
+<!-- トロフィー詳細パネル -->
+<div class="overlay" id="trophy-overlay" onclick="closeTrophyPanel()">
+  <div class="panel" onclick="event.stopPropagation()">
+    <div class="panel-close-row">
+      <button class="panel-close" onclick="closeTrophyPanel()">✕ 閉じる</button>
+    </div>
+    <div id="trophy-panel"></div>
+  </div>
+</div>
+
+<script>
+// ===== Google Apps Script API =====
+var GAS_URL = 'https://script.google.com/macros/s/AKfycbwTH9JEVDoNFJuSBcnX3fNVf43DsPuekX5qkL0gkn1jTnAmoDYIk1yrjwS8nrbhJxGS7Q/exec';
+var PASS = '5017';
+var _schedules = null;
+var _trophies = null;
+// ===== アクセスカウンター（サーバー共有） =====
+(function(){
+  fetch(GAS_URL + '?action=getUpdated')
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      var el = document.getElementById("update-date");
+      if(el && d.updated) el.textContent = "UPDATED " + d.updated;
+    }).catch(function(){});
+})();
+
+var classStyle = {
+  three:  {color:"#e8a84c",border:"1px solid rgba(232,168,76,0.6)"},
+  two:    {color:"#c07adc",border:"1px solid rgba(160,90,200,0.5)"},
+  one:    {color:"#7ab4d8",border:"1px solid rgba(70,130,180,0.5)"},
+  novice: {color:"#7a8aaa",border:"1px solid rgba(122,138,170,0.4)"},
+  pre:    {color:"#6abf6a",border:"1px solid rgba(100,190,100,0.5)"},
+};
+
+// ===== SVG =====
+function sundaySVG(sz){
+  return '<svg viewBox="0 0 80 90" style="width:'+sz+'px;height:'+sz+'px;filter:drop-shadow(0 2px 6px rgba(0,0,0,.7))">'
+    +'<path d="M20,20 L60,20 L68,60 L12,60 Z" fill="#1a1a1a" stroke="#444" stroke-width=".8"/>'
+    +'<line x1="20" y1="20" x2="68" y2="60" stroke="#cc2200" stroke-width="5"/>'
+    +'<line x1="60" y1="20" x2="12" y2="60" stroke="#cc2200" stroke-width="5"/>'
+    +'<path d="M12,60 L20,20 L6,28 L2,65 Z" fill="#1a1a1a" stroke="#444" stroke-width=".8"/>'
+    +'<line x1="9" y1="28" x2="5.5" y2="60" stroke="#e6c800" stroke-width="2.5"/>'
+    +'<line x1="13" y1="24" x2="9" y2="62" stroke="#e6c800" stroke-width="2.5"/>'
+    +'<path d="M68,60 L60,20 L74,28 L78,65 Z" fill="#1a1a1a" stroke="#444" stroke-width=".8"/>'
+    +'<line x1="71" y1="28" x2="74.5" y2="60" stroke="#e6c800" stroke-width="2.5"/>'
+    +'<line x1="67" y1="24" x2="71" y2="62" stroke="#e6c800" stroke-width="2.5"/>'
+    +'<rect x="31" y="10" width="18" height="12" rx="2" fill="#1a1a1a" stroke="#444" stroke-width=".8"/>'
+    +'</svg>';
+}
+function carrotSVG(id,sz){
+  return '<svg viewBox="0 0 80 90" style="width:'+sz+'px;height:'+sz+'px;filter:drop-shadow(0 2px 6px rgba(0,0,0,.7))">'
+    +'<defs><clipPath id="cb'+id+'"><path d="M20,20 L60,20 L68,60 L12,60 Z"/></clipPath>'
+    +'<clipPath id="cl'+id+'"><path d="M12,60 L20,20 L6,28 L2,65 Z"/></clipPath>'
+    +'<clipPath id="cr'+id+'"><path d="M68,60 L60,20 L74,28 L78,65 Z"/></clipPath></defs>'
+    +'<path d="M20,20 L60,20 L68,60 L12,60 Z" fill="#1a7a1a" stroke="#333" stroke-width=".8"/>'
+    +'<rect x="10" y="30" width="62" height="7" fill="white" clip-path="url(#cb'+id+')"/>'
+    +'<rect x="10" y="44" width="62" height="7" fill="white" clip-path="url(#cb'+id+')"/>'
+    +'<path d="M12,60 L20,20 L6,28 L2,65 Z" fill="white" stroke="#ccc" stroke-width=".8"/>'
+    +'<rect x="0" y="43" width="22" height="6" fill="#cc2200" clip-path="url(#cl'+id+')"/>'
+    +'<path d="M68,60 L60,20 L74,28 L78,65 Z" fill="white" stroke="#ccc" stroke-width=".8"/>'
+    +'<rect x="58" y="43" width="22" height="6" fill="#cc2200" clip-path="url(#cr'+id+')"/>'
+    +'<rect x="31" y="10" width="18" height="12" rx="2" fill="#1a7a1a" stroke="#333" stroke-width=".8"/>'
+    +'</svg>';
+}
+function g1SVG(sz){
+  return '<svg viewBox="0 0 80 90" style="width:'+sz+'px;height:'+sz+'px;filter:drop-shadow(0 2px 6px rgba(0,0,0,.7))">'
+    +'<defs><clipPath id="gl'+sz+'"><path d="M12,60 L20,20 L6,28 L2,65 Z"/></clipPath>'
+    +'<clipPath id="gr'+sz+'"><path d="M68,60 L60,20 L74,28 L78,65 Z"/></clipPath></defs>'
+    +'<path d="M20,20 L60,20 L68,60 L12,60 Z" fill="#1a1a1a" stroke="#444" stroke-width=".8"/>'
+    +'<line x1="22" y1="20" x2="66" y2="60" stroke="#cc2200" stroke-width="6"/>'
+    +'<path d="M12,60 L20,20 L6,28 L2,65 Z" fill="#1a1a1a" stroke="#444" stroke-width=".8"/>'
+    +'<rect x="0" y="43" width="22" height="6" fill="#cc2200" clip-path="url(#gl'+sz+')"/>'
+    +'<path d="M68,60 L60,20 L74,28 L78,65 Z" fill="#1a1a1a" stroke="#444" stroke-width=".8"/>'
+    +'<rect x="58" y="43" width="22" height="6" fill="#cc2200" clip-path="url(#gr'+sz+')"/>'
+    +'<rect x="31" y="10" width="18" height="12" rx="2" fill="#1a1a1a" stroke="#444" stroke-width=".8"/>'
+    +'</svg>';
+}
+
+// ===== 馬データ =====
+var horses = [
+  {id:1,nameJp:"エルフストラック",nameEn:"Elf Struck",age:"5歳",gender:"牝",gc:"#e88aaa",
+   sire:"California Chrome",dam:"スペルオンミー",trainer:"栗東・中村直也",club:"サンデーTC",
+   cl:"3勝クラス",ck:"three",wins:3,
+   origin:"（魔法をかけられたように）魅了された。母名スペルオンミーより連想。",
+   note:"米二冠馬カリフォルニアクローム産駒。マジカルアメジストとは異父きょうだい。兄弟にパラサイコロジー・スマイルオンミーなど。",
+   sm:function(){return sundaySVG(36);},lg:function(){return sundaySVG(64);}},
+  {id:2,nameJp:"ヴァリオーサ",nameEn:"Valiosa",age:"4歳",gender:"牝",gc:"#e88aaa",
+   sire:"エピファネイア",dam:"ディヴィナプレシオーサ",trainer:"栗東・武幸四郎",club:"G1レーシング",
+   cl:"2勝クラス",ck:"two",wins:2,
+   origin:"スペイン語で「貴重な・高価な」（女性形）。",
+   note:"母ディヴィナプレシオーサはチリ2歳牝馬チャンピオン。エピファネイア×南米良血の配合。",
+   sm:function(){return g1SVG(36);},lg:function(){return g1SVG(64);}},
+  {id:3,nameJp:"セントゴーデンス",nameEn:"Saint Gaudens",age:"3歳",gender:"騸",gc:"#b07adc",
+   sire:"ロードカナロア",dam:"ラッキーダイム",trainer:"美浦・黒岩陽一",club:"キャロットクラブ",
+   cl:"1勝クラス",ck:"one",wins:1,
+   origin:"1900年代前半に米国で発行された20ドル金貨より。母名ラッキーダイムより連想。",
+   note:"ロードカナロア×米国産ラッキーダイム（母父クリエイティブコーズ）。兄弟にマーキュリーダイム・ブレイクガール。",
+   sm:function(){return carrotSVG("3s",36);},lg:function(){return carrotSVG("3l",64);}},
+  {id:4,nameJp:"マジカルアメジスト",nameEn:"Magical Amethyst",age:"3歳",gender:"牝",gc:"#e88aaa",
+   sire:"シスキン",dam:"スペルオンミー",trainer:"栗東・吉岡辰弥",club:"サンデーTC",
+   cl:"1勝クラス",ck:"one",wins:1,
+   origin:"アジサイの品種名より。母名スペルオンミーより連想。",
+   note:"欧州快速馬シスキン産駒。エルフストラックとは異父きょうだい。兄姉にエルフストラック・パラサイコロジー・スマイルオンミー。",
+   sm:function(){return sundaySVG(36);},lg:function(){return sundaySVG(64);}},
+  {id:5,nameJp:"ラジャブルック",nameEn:"Rajah Brooke",age:"3歳",gender:"牡",gc:"#6ab0e0",
+   sire:"ナダル",dam:"リャスナ",trainer:"栗東・髙野友和",club:"キャロットクラブ",
+   cl:"未勝利",ck:"novice",wins:0,
+   origin:"マレーシアの国蝶より。競馬場で華麗に舞ってほしいという願いを込めて。",
+   note:"父はBCジュベナイルスプリント覇者ナダル。母リャスナは父ディープインパクト産駒。",
+   sm:function(){return carrotSVG("5s",36);},lg:function(){return carrotSVG("5l",64);}},
+  {id:6,nameJp:"ギャニミード",nameEn:"Ganymede",age:"3歳",gender:"牝",gc:"#e88aaa",
+   sire:"ドレフォン",dam:"シーリア",trainer:"美浦・木村哲也",club:"キャロットクラブ",
+   cl:"未勝利",ck:"novice",wins:0,
+   origin:"木星最大の衛星の名より。",
+   note:"父ドレフォン×母シーリア（母父キングカメハメハ）。兄ヴィンセンシオはJRA2勝・弥生賞2着の実力馬。",
+   sm:function(){return carrotSVG("6s",36);},lg:function(){return carrotSVG("6l",64);}},
+  {id:7,nameJp:"デュアルサイン",nameEn:"Dual Sign",age:"2歳",gender:"牡",gc:"#6ab0e0",
+   sire:"スワーヴリチャード",dam:"メサルティム",trainer:"栗東・武幸四郎",club:"キャロットクラブ",
+   cl:"デビュー前",ck:"pre",wins:null,
+   origin:"英語で「二つの印」。母名のメサルティムが二重星であることから連想。",
+   note:"父スワーヴリチャード×母メサルティム。白老ファーム生産の2024年産牡馬。育成中。",
+   sm:function(){return carrotSVG("7s",36);},lg:function(){return carrotSVG("7l",64);}},
+  {id:8,nameJp:"レゾルーティオ",nameEn:"Resolutio",age:"2歳",gender:"牡",gc:"#6ab0e0",
+   sire:"サトノクラウン",dam:"ヴィレンスクラフト",trainer:"栗東・坂口智康",club:"サンデーTC",
+   cl:"デビュー前",ck:"pre",wins:null,
+   origin:"ラテン語で「決意・解決」の意。堂々たるデビューへの願いを込めて。",
+   note:"6/7阪神5Rメイクデビュー（芝1,400m）に西村淳也騎手で出走予定。",
+   sm:function(){return sundaySVG(36);},lg:function(){return sundaySVG(64);}},
+  {id:9,nameJp:"ベルグラース",nameEn:"Belle Grace",age:"2歳",gender:"牝",gc:"#e88aaa",
+   sire:"マインドユアビスケッツ",dam:"ベルディーヴァ",trainer:"美浦・浅利英明",club:"キャロットクラブ",
+   cl:"デビュー前",ck:"pre",wins:null,
+   origin:"フランス語で「美しい優雅さ（Belle Grace）」。母名ベルディーヴァより連想。",
+   note:"父マインドユアビスケッツ×母ベルディーヴァ。2024年産の2歳牝馬。育成中。",
+   sm:function(){return carrotSVG("9s",36);},lg:function(){return carrotSVG("9l",64);}}
+];
+
+function starsStr(ck){
+  var n=ck==="three"?3:ck==="two"?2:ck==="one"?1:0;
+  return n>0?"⭐".repeat(n):"";
+}
+
+// ===== リスト描画 =====
+var list=document.getElementById("horse-list");
+
+function renderHorseList(){
+  list.innerHTML="";
+  var schedules=getSchedules();
+  var today=new Date(); today.setHours(0,0,0,0);
+  var dayNames=["日","月","火","水","木","金","土"];
+
+  horses.forEach(function(h,i){
+    var cs=classStyle[h.ck];
+    var s=starsStr(h.ck);
+
+    // この馬の直近の出走予定を取得
+    var upcoming=schedules.filter(function(sc){
+      return sc.horse===h.nameJp && new Date(sc.date)>=today;
+    }).sort(function(a,b){return new Date(a.date)-new Date(b.date);});
+    var nextRace=upcoming.length>0?upcoming[0]:null;
+    var raceBadge="";
+    if(nextRace){
+      var d=new Date(nextRace.date);
+      var dow=d.getDay();
+      var dowColor=dow===0?"#e07070":dow===6?"#7090e0":"#c9a84c";
+      // レース場所を抽出（例：「東京10R シドニーT」→「東京」）
+      var venue=nextRace.race.replace(/(\d+R.*)/,"").trim();
+      raceBadge='<span style="font-family:Montserrat,sans-serif;font-size:9px;color:'+dowColor+';background:rgba(201,168,76,0.08);border:1px solid '+dowColor+';padding:2px 7px;border-radius:10px;white-space:nowrap;display:inline-flex;align-items:center;">'+(d.getMonth()+1)+'/'+(d.getDate())+(venue?' '+venue:'')+'</span>';
+    }
+
+    var row=document.createElement("div");
+    row.className="row";
+    row.style.borderLeft="2px solid "+(i<2?"#c9a84c":i<6?"rgba(201,168,76,0.3)":"rgba(201,168,76,0.1)");
+    row.style.animation="fadeUp 0.4s "+(i*0.05)+"s both";
+    row.innerHTML=
+      '<div class="row-num">'+h.id+'</div>'+
+      '<div style="flex-shrink:0">'+h.sm()+'</div>'+
+      '<div class="row-info">'+
+        '<div style="display:flex;align-items:center;justify-content:space-between;gap:4px">'+
+          '<div class="row-name" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0">'+
+            h.nameJp+(s?'<span style="margin-left:4px;font-size:10px">'+s+'</span>':'')+
+          '</div>'+
+          (raceBadge?'<div style="flex-shrink:0">'+raceBadge+'</div>':'')+
+        '</div>'+
+        '<div class="row-sub">'+
+          '<span style="font-weight:700;color:#e8eaf0">'+h.age+'</span> · '+
+          '<span style="color:'+h.gc+';font-weight:600">'+h.gender+'</span> · '+
+          h.club+' · '+h.trainer+
+        '</div>'+
+      '</div>'+
+      '<div class="row-class" style="color:'+cs.color+';border:'+cs.border+'">'+h.cl+'</div>'+
+      '<div class="row-arrow">›</div>';
+    row.onclick=function(){openHorsePanel(h);};
+    list.appendChild(row);
+  });
+}
+
+renderHorseList();
+
+// ===== 愛馬パネル =====
+var currentHorseId=null;
+function openHorsePanel(h){
+  currentHorseId=h.id;
+  var cs=classStyle[h.ck];
+  var s=starsStr(h.ck);
+  document.getElementById("horse-panel").innerHTML=
+    '<div style="display:flex;align-items:center;gap:16px;margin-bottom:20px">'+
+      '<div>'+h.lg()+'</div>'+
+      '<div>'+
+        '<div class="panel-name">'+h.nameJp+'<span style="font-size:13px;color:'+h.gc+';margin-left:8px">'+h.age+h.gender+'</span></div>'+
+        '<div class="panel-name-en">'+h.nameEn+'</div>'+
+        '<div class="panel-badges">'+
+          '<span style="font-family:Montserrat,sans-serif;font-size:9px;padding:2px 8px;color:'+cs.color+';border:'+cs.border+'">'+h.cl+'</span>'+
+          (s?'<span style="font-size:12px">'+s+'</span>':'')+
+        '</div>'+
+      '</div>'+
+    '</div>'+
+    '<div class="divider"></div>'+
+    '<div class="sec-label">BLOODLINE</div>'+
+    '<div class="grid2">'+
+      '<div><div class="fl">父</div><div class="fv">'+h.sire+'</div></div>'+
+      '<div><div class="fl">母</div><div class="fv">'+h.dam+'</div></div>'+
+      '<div><div class="fl">厩舎</div><div class="fv">'+h.trainer+'</div></div>'+
+      '<div><div class="fl">クラブ</div><div class="fv">'+h.club+'</div></div>'+
+    '</div>'+
+    '<div class="divider-sm"></div>'+
+    '<div class="sec-label">RECORD</div>'+
+    '<div style="margin-bottom:18px">'+
+      '<div class="fl">勝利数</div>'+
+      '<div style="font-family:Montserrat,sans-serif;font-size:22px;font-weight:800;color:'+(h.wins>0?"#c9a84c":"#7a8aaa")+'">'+
+        (h.wins!==null?h.wins+"勝":"—")+
+      '</div>'+
+    '</div>'+
+    '<div class="divider-sm"></div>'+
+    '<div class="sec-label">NAME ORIGIN</div>'+
+    '<div class="origin-box">'+h.origin+'</div>'+
+    (h.note?'<div class="divider-sm"></div><div class="sec-label">NOTE</div><div class="note-box">'+h.note+'</div>':'');
+  document.getElementById("horse-overlay").classList.add("open");
+  document.body.style.overflow="hidden";
+  // 牝馬はパネルをピンク系に（DOM確定後に適用）
+  setTimeout(function(){
+    var panel = document.querySelector("#horse-overlay .panel");
+    var isMare = h.gender === "牝";
+    var isGelding = h.gender === "騸";
+    if(isMare){
+      panel.style.background = "#2a1428";
+      panel.style.borderTopColor = "#e88aaa";
+      panel.querySelectorAll(".sec-label").forEach(function(el){el.style.color="#e88aaa";});
+      panel.querySelectorAll(".divider").forEach(function(el){el.style.background="linear-gradient(90deg,rgba(232,138,170,.5),transparent)";});
+      panel.querySelectorAll(".divider-sm").forEach(function(el){el.style.background="linear-gradient(90deg,rgba(232,138,170,.25),transparent)";});
+      panel.querySelectorAll(".origin-box").forEach(function(el){el.style.borderLeftColor="rgba(232,138,170,.4)";});
+      panel.querySelectorAll(".fl").forEach(function(el){el.style.color="#b07088";});
+      panel.querySelectorAll(".panel-name-en").forEach(function(el){el.style.color="#b07088";});
+      panel.querySelectorAll(".panel-close").forEach(function(el){el.style.borderColor="#6a3050";el.style.color="#b07088";});
+    } else if(isGelding){
+      panel.style.background = "#1e1430";
+      panel.style.borderTopColor = "#b07adc";
+      panel.querySelectorAll(".sec-label").forEach(function(el){el.style.color="#b07adc";});
+      panel.querySelectorAll(".divider").forEach(function(el){el.style.background="linear-gradient(90deg,rgba(176,122,220,.5),transparent)";});
+      panel.querySelectorAll(".divider-sm").forEach(function(el){el.style.background="linear-gradient(90deg,rgba(176,122,220,.25),transparent)";});
+      panel.querySelectorAll(".origin-box").forEach(function(el){el.style.borderLeftColor="rgba(176,122,220,.4)";});
+      panel.querySelectorAll(".fl").forEach(function(el){el.style.color="#8a60a8";});
+      panel.querySelectorAll(".panel-name-en").forEach(function(el){el.style.color="#8a60a8";});
+      panel.querySelectorAll(".panel-close").forEach(function(el){el.style.borderColor="#4a2870";el.style.color="#8a60a8";});
+    } else {
+      panel.style.background=""; panel.style.borderTopColor="";
+      panel.querySelectorAll(".sec-label,.divider,.divider-sm,.origin-box,.fl,.panel-name-en,.panel-close").forEach(function(el){
+        el.style.color=""; el.style.background=""; el.style.borderLeftColor=""; el.style.borderColor="";
+      });
+    }
+  },0);
+}
+
+function closeHorsePanel(){
+  document.getElementById("horse-overlay").classList.remove("open");
+  document.body.style.overflow="";
+  currentHorseId=null;
+}
+
+
+
+
+
+
+
+
+
+
+
+// ドラッグ
+
+
+
+
+// ===== ナビ =====
+function showPage(page){
+  document.getElementById("page-stable").classList.remove("active");
+  document.getElementById("page-schedule").classList.remove("active");
+  document.getElementById("page-trophy").classList.remove("active");
+  document.getElementById("nav-stable").classList.remove("active");
+  document.getElementById("nav-schedule").classList.remove("active");
+  document.getElementById("nav-trophy").classList.remove("active");
+  document.getElementById("page-"+page).classList.add("active");
+  document.getElementById("nav-"+page).classList.add("active");
+  if(page==="stable"){
+    loadSchedulesFromServer(function(){ renderHorseList(); });
+  }
+  if(page==="trophy"){
+    showLoading("trophy-grid");
+    loadTrophiesFromServer(function(){ renderTrophies(); });
+  }
+  if(page==="schedule"){
+    showLoading("schedule-list");
+    loadSchedulesFromServer(function(){ renderSchedule(); });
+  }
+}
+
+function showLoading(id){
+  var el = document.getElementById(id);
+  if(el) el.innerHTML = '<div style="text-align:center;padding:40px 0;color:#5a7aaa;font-family:Montserrat,sans-serif;font-size:11px;letter-spacing:3px;">読み込み中...</div>';
+}
+
+// ===== スケジュール =====
+var calYear, calMonth;
+(function(){
+  var now=new Date();
+  calYear=now.getFullYear();
+  calMonth=now.getMonth();
+})();
+
+// ===== アクセスカウンター =====
+function getSchedules(){
+  if (_schedules !== null) return _schedules;
+  try { return JSON.parse(localStorage.getItem("schedules_cache")||"[]"); } catch(e) { return []; }
+}
+function saveSchedules(data){
+  _schedules = data;
+  localStorage.setItem("schedules_cache", JSON.stringify(data));
+  fetch(GAS_URL, {
+    method:'POST',
+    body: JSON.stringify({action:'saveSchedules', pass:PASS, data:data})
+  }).then(function(r){ return r.json(); })
+    .then(function(d){
+      if(d.updated){
+        var el = document.getElementById("update-date");
+        if(el) el.textContent = "UPDATED " + d.updated;
+      }
+    }).catch(function(){});
+}
+function loadSchedulesFromServer(callback){
+  // まずキャッシュで即時表示
+  var cached = localStorage.getItem("schedules_cache");
+  if(cached){
+    try{
+      _schedules = JSON.parse(cached);
+      if(callback) callback();
+    }catch(e){}
+  }
+  // バックグラウンドでサーバーから最新取得→差分あれば再描画
+  fetch(GAS_URL + '?action=getSchedules')
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      var newStr = JSON.stringify(data);
+      var oldStr = localStorage.getItem("schedules_cache")||"[]";
+      _schedules = data;
+      localStorage.setItem("schedules_cache", newStr);
+      // 差分があれば自動更新（スケジュールと愛馬一覧の両方）
+      if(newStr !== oldStr){
+        renderSchedule();
+        renderHorseList();
+      }
+    })
+    .catch(function(){});
+}
+
+function renderSchedule(){
+  renderCal();
+  renderSchedList();
+}
+
+function calMove(dir){
+  calMonth+=dir;
+  if(calMonth<0){ calMonth=11; calYear--; }
+  if(calMonth>11){ calMonth=0; calYear++; }
+  renderCal();
+}
+
+function renderCal(){
+  var months=["January","February","March","April","May","June","July","August","September","October","November","December"];
+  document.getElementById("cal-title").textContent=calYear+"年 "+( calMonth+1)+"月";
+  var schedules=getSchedules();
+  var raceDates={};
+  schedules.forEach(function(s){
+    var d=new Date(s.date);
+    if(d.getFullYear()===calYear&&d.getMonth()===calMonth){
+      var key=d.getDate();
+      raceDates[key]=(raceDates[key]||0)+1;
+    }
+  });
+  var today=new Date();
+  var firstDay=new Date(calYear,calMonth,1).getDay();
+  var daysInMonth=new Date(calYear,calMonth+1,0).getDate();
+  var daysInPrev=new Date(calYear,calMonth,0).getDate();
+  var dayLabels=["日","月","火","水","木","金","土"];
+  var html="";
+  dayLabels.forEach(function(d,i){
+    html+='<div class="cal-day-label" style="color:'+(i===0?"#e05050":i===6?"#5080e0":"#7a8aaa")+'">'+d+'</div>';
+  });
+  for(var i=0;i<firstDay;i++){
+    var day=daysInPrev-firstDay+i+1;
+    html+='<div class="cal-day cal-other"><div class="cal-num">'+day+'</div></div>';
+  }
+  for(var d=1;d<=daysInMonth;d++){
+    var isToday=today.getFullYear()===calYear&&today.getMonth()===calMonth&&today.getDate()===d;
+    var hasRace=raceDates[d]||0;
+    var dow=(firstDay+d-1)%7;
+    var dayColor=dow===0?"#e07070":dow===6?"#7090e0":"#e8eaf0";
+    var cls="cal-day"+(isToday?" today":"")+(hasRace?" has-race":"");
+    var onclick=hasRace?' onclick="calDayClick('+d+')"':'';
+    html+='<div class="'+cls+'"'+onclick+'>';
+    html+='<div class="cal-num" style="color:'+(isToday?"":dayColor)+'">'+d+'</div>';
+    if(hasRace){
+      for(var k=0;k<Math.min(hasRace,3);k++) html+='<div class="cal-dot"></div>';
+    }
+    html+='</div>';
+  }
+  var remaining=(7-((firstDay+daysInMonth)%7))%7;
+  for(var i=1;i<=remaining;i++){
+    html+='<div class="cal-day cal-other"><div class="cal-num">'+i+'</div></div>';
+  }
+  document.getElementById("cal-grid").innerHTML=html;
+}
+
+function calDayClick(day){
+  var schedules=getSchedules();
+  var target=schedules.filter(function(s){
+    var d=new Date(s.date);
+    return d.getFullYear()===calYear&&d.getMonth()===calMonth&&d.getDate()===day;
+  });
+  if(target.length===1){
+    var idx=schedules.indexOf(target[0]);
+    openSchedPanel(idx);
+  } else if(target.length>1){
+    // 複数ある場合は最初のものを表示
+    openSchedPanel(schedules.indexOf(target[0]));
+  }
+}
+
+function renderSchedList(){
+  var schedules=getSchedules();
+  var today=new Date(); today.setHours(0,0,0,0);
+  schedules.sort(function(a,b){return new Date(a.date)-new Date(b.date);});
+  var html="";
+  if(schedules.length===0){
+    html='<div style="text-align:center;padding:40px 0;font-family:Montserrat,sans-serif;font-size:10px;color:#3a4a6a;letter-spacing:2px;">出走予定はありません</div>';
+  }
+  schedules.forEach(function(s,i){
+    var d=new Date(s.date);
+    var isPast=d<today;
+    var dayNames=["日","月","火","水","木","金","土"];
+    var dow=d.getDay();
+    var dowColor=dow===0?"#e07070":dow===6?"#7090e0":"#c9a84c";
+    var dateStr=(d.getMonth()+1)+"/"+d.getDate()+"（"+'<span style="color:'+dowColor+'">'+dayNames[dow]+'</span>'+"）";
+    html+='<div class="sched-item'+(isPast?" past":'')+'" onclick="openSchedPanel('+i+')">'+
+      '<div class="sched-date">'+dateStr+'</div>'+
+      '<div class="sched-horse">'+s.horse+'</div>'+
+      '<div class="sched-info">'+s.race+(s.dist?" · "+s.dist:"")+(s.jockey?" · "+s.jockey+"騎手":"")+'</div>'+
+    '</div>';
+  });
+  document.getElementById("schedule-list").innerHTML=html;
+}
+
+function toggleSchedForm(){
+  var f=document.getElementById("sched-form");
+  f.style.display=f.style.display==="none"?"block":"none";
+  if(f.style.display==="block") document.getElementById("sf-horse").focus();
+}
+
+function saveSchedule(){
+  var pw=document.getElementById("sf-pw").value;
+  if(pw!==PASS){ document.getElementById("sf-err").style.display="block"; document.getElementById("sf-pw").value=""; return; }
+  var horse=document.getElementById("sf-horse").value.trim();
+  var date=document.getElementById("sf-date").value;
+  var race=document.getElementById("sf-race").value.trim();
+  var dist=document.getElementById("sf-dist").value.trim();
+  var jockey=document.getElementById("sf-jockey").value.trim();
+  if(!horse||!date||!race){ alert("馬名・日付・レース名を入力してください"); return; }
+  var schedules=getSchedules();
+  schedules.push({horse:horse,date:date,race:race,dist:dist,jockey:jockey});
+  saveSchedules(schedules);
+  document.getElementById("sched-form").style.display="none";
+  document.getElementById("sf-horse").value="";
+  document.getElementById("sf-date").value="";
+  document.getElementById("sf-race").value="";
+  document.getElementById("sf-dist").value="";
+  document.getElementById("sf-jockey").value="";
+  document.getElementById("sf-pw").value="";
+  renderSchedule();
+  renderHorseList();
+}
+
+function openSchedPanel(index){
+  var s=getSchedules()[index];
+  if(!s) return;
+  var d=new Date(s.date);
+  var dayNames=["日","月","火","水","木","金","土"];
+  var dow=d.getDay();
+  var dowColor=dow===0?"#e07070":dow===6?"#7090e0":"#c9a84c";
+  document.getElementById("sched-panel").innerHTML=
+    '<div style="margin-bottom:20px">'+
+      '<div style="font-family:Montserrat,sans-serif;font-size:11px;color:'+dowColor+';letter-spacing:3px;margin-bottom:8px;">'+
+        (d.getMonth()+1)+' / '+d.getDate()+' （'+dayNames[dow]+'）'+
+      '</div>'+
+      '<div style="font-size:24px;font-weight:700;color:#e8eaf0;margin-bottom:6px;">'+s.horse+'</div>'+
+      '<div style="font-size:14px;color:#c9a84c;margin-bottom:16px;">'+s.race+'</div>'+
+    '</div>'+
+    '<div class="divider"></div>'+
+    '<div class="grid2">'+
+      (s.dist?'<div><div class="fl">距離</div><div class="fv">'+s.dist+'</div></div>':'')+
+      (s.jockey?'<div><div class="fl">騎手</div><div class="fv">'+s.jockey+' 騎手</div></div>':'')+
+    '</div>'+
+    '<div class="divider-sm"></div>'+
+    '<div id="del-sched-area">'+
+      '<button onclick="showDelSched('+index+')" style="width:100%;background:transparent;border:1px solid rgba(200,80,80,.3);color:#e05050;padding:8px;font-size:10px;cursor:pointer;border-radius:4px;font-family:Montserrat,sans-serif;letter-spacing:1px;">'+
+        '✕ このスケジュールを削除'+
+      '</button>'+
+    '</div>';
+  document.getElementById("sched-overlay").classList.add("open");
+  document.body.style.overflow="hidden";
+}
+
+function showDelSched(index){
+  document.getElementById("del-sched-area").innerHTML=
+    '<div style="display:flex;gap:8px;align-items:center;margin-top:8px">'+
+      '<input class="pw-input" id="dsp" type="password" placeholder="パスワード" maxlength="10" onkeydown="if(event.key===\'Enter\')doDelSched('+index+')">'+
+      '<button onclick="doDelSched('+index+')" style="background:#8b0000;border:none;color:white;padding:7px 14px;font-size:10px;cursor:pointer;border-radius:2px;font-family:Montserrat,sans-serif;">削除</button>'+
+    '</div>'+
+    '<div id="dsp-err" class="pw-err">パスワードが違います</div>';
+  setTimeout(function(){document.getElementById("dsp")&&document.getElementById("dsp").focus();},100);
+}
+
+function doDelSched(index){
+  if(document.getElementById("dsp").value===PASS){
+    var s=getSchedules(); s.splice(index,1); saveSchedules(s);
+    closeSchedPanel(); renderSchedule(); renderHorseList();
+  } else {
+    document.getElementById("dsp-err").style.display="block";
+    document.getElementById("dsp").value="";
+  }
+}
+
+function closeSchedPanel(){
+  document.getElementById("sched-overlay").classList.remove("open");
+  document.body.style.overflow="";
+}
+
+// ===== トロフィー =====
+var gradeMap={
+  "G1":{label:"GⅠ",cls:"g1",cup:"🏆"},
+  "G2":{label:"GⅡ",cls:"g2",cup:"🏆"},
+  "G3":{label:"GⅢ",cls:"g3",cup:"🏆"},
+  "OP":{label:"OP/L",cls:"gop",cup:"🏆"}
+};
+
+function getTrophies(){
+  if (_trophies !== null) return _trophies;
+  try { return JSON.parse(localStorage.getItem("trophies_cache")||"[]"); } catch(e) { return []; }
+}
+function saveTrophies(data){
+  _trophies = data;
+  localStorage.setItem("trophies_cache", JSON.stringify(data));
+  fetch(GAS_URL, {
+    method:'POST',
+    body: JSON.stringify({action:'saveTrophies', pass:PASS, data:data})
+  }).then(function(r){ return r.json(); })
+    .then(function(d){
+      if(d.updated){
+        var el = document.getElementById("update-date");
+        if(el) el.textContent = "UPDATED " + d.updated;
+      }
+    }).catch(function(){});
+}
+function loadTrophiesFromServer(callback){
+  // まずキャッシュで即時表示
+  var cached = localStorage.getItem("trophies_cache");
+  if(cached){
+    try{
+      _trophies = JSON.parse(cached);
+      if(callback) callback();
+    }catch(e){}
+  }
+  // バックグラウンドでサーバーから最新取得→差分あれば再描画
+  fetch(GAS_URL + '?action=getTrophies')
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      var newStr = JSON.stringify(data);
+      var oldStr = localStorage.getItem("trophies_cache")||"[]";
+      _trophies = data;
+      localStorage.setItem("trophies_cache", newStr);
+      if(newStr !== oldStr) renderTrophies();
+    })
+    .catch(function(){});
+}
+
+function renderTrophies(){
+  var grid=document.getElementById("trophy-grid");
+  var trophies=getTrophies();
+  var html="";
+  trophies.forEach(function(t,i){
+    var g=gradeMap[t.grade]||gradeMap["OP"];
+    var cardBg=t.grade==="G1"?"rgba(30,80,200,.15)":t.grade==="G2"?"rgba(160,20,40,.15)":t.grade==="G3"?"rgba(20,130,80,.15)":"rgba(100,140,200,.08)";
+    var cardBorder=t.grade==="G1"?"rgba(70,130,220,.35)":t.grade==="G2"?"rgba(180,40,60,.35)":t.grade==="G3"?"rgba(40,160,100,.35)":"rgba(201,168,76,.2)";
+    var vid=t.yt?extractYTId(t.yt):null;
+    html+='<div class="trophy-card" style="animation-delay:'+(i*0.06)+'s;background:'+cardBg+';border:1px solid '+cardBorder+'" onclick="openTrophyPanel('+i+')">'+
+      '<div class="trophy-cup">🏆</div>'+
+      '<div class="grade-badge '+g.cls+'">'+g.label+'</div>'+
+      '<div class="trophy-race">'+t.race+'</div>'+
+      '<div class="trophy-horse">'+t.horse+'</div>'+
+      '<div class="trophy-date">'+t.date+'</div>'+
+    '</div>';
+  });
+  html+='<button class="trophy-add-btn" onclick="toggleTrophyForm()">＋ 追加</button>'+
+    '<div id="trophy-form" style="display:none;grid-column:1/-1">'+
+      '<div class="trophy-form-wrap">'+
+        '<div class="sec-label" style="margin-bottom:14px">ADD TROPHY</div>'+
+        '<input class="t-input" id="tf-horse" placeholder="馬名">'+
+        '<input class="t-input" id="tf-race" placeholder="レース名（例：東京優駿）">'+
+        '<input class="t-input" id="tf-date" placeholder="日付（例：2026.5.31）">'+
+        '<select class="t-select" id="tf-grade">'+
+          '<option value="G1">GⅠ</option>'+
+          '<option value="G2">GⅡ</option>'+
+          '<option value="G3">GⅢ</option>'+
+          '<option value="OP">OP / L</option>'+
+        '</select>'+
+        '<input class="t-input" id="tf-yt" placeholder="YouTube URL（任意）">'+
+        '<input class="t-input" id="tf-pw" type="password" placeholder="パスワード" onkeydown="if(event.key===\'Enter\')saveTrophy()">'+
+        '<div id="tf-err" class="pw-err">パスワードが違います</div>'+
+        '<button class="t-save-btn" onclick="saveTrophy()">保存する</button>'+
+        '<button class="t-cancel-btn" onclick="toggleTrophyForm()">キャンセル</button>'+
+      '</div>'+
+    '</div>';
+  grid.innerHTML=html;
+}
+
+function toggleTrophyForm(){
+  var f=document.getElementById("trophy-form");
+  f.style.display=f.style.display==="none"?"block":"none";
+}
+
+function extractYTId(url){
+  if(!url) return null;
+  var m=url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})/);
+  return m?m[1]:null;
+}
+
+function saveTrophy(){
+  var pw=document.getElementById("tf-pw").value;
+  if(pw!==PASS){ document.getElementById("tf-err").style.display="block"; document.getElementById("tf-pw").value=""; return; }
+  var horse=document.getElementById("tf-horse").value.trim();
+  var race=document.getElementById("tf-race").value.trim();
+  var date=document.getElementById("tf-date").value.trim();
+  var grade=document.getElementById("tf-grade").value;
+  var yt=document.getElementById("tf-yt").value.trim();
+  if(!horse||!race||!date){ alert("馬名・レース名・日付を入力してください"); return; }
+  var trophies=getTrophies();
+  trophies.unshift({horse:horse,race:race,date:date,grade:grade,yt:yt});
+  saveTrophies(trophies);
+  renderTrophies();
+}
+
+function openTrophyPanel(index){
+  var t=getTrophies()[index];
+  if(!t) return;
+  var g=gradeMap[t.grade]||gradeMap["OP"];
+  document.getElementById("trophy-panel").innerHTML=
+    '<div style="text-align:center;padding:10px 0 20px">'+
+      '<div style="font-size:64px;margin-bottom:8px">🏆</div>'+
+      '<div class="grade-badge '+g.cls+'" style="display:inline-block;margin-bottom:12px">'+g.label+'</div>'+
+      '<div style="font-size:22px;font-weight:700;color:#e8eaf0;margin-bottom:6px">'+t.race+'</div>'+
+      '<div style="font-family:Montserrat,sans-serif;font-size:14px;color:#c9a84c;letter-spacing:2px;margin-bottom:6px">'+t.horse+'</div>'+
+      '<div style="font-family:Montserrat,sans-serif;font-size:11px;color:#7a8aaa">'+t.date+'</div>'+
+    '</div>'+
+    (t.yt?
+      '<button onclick="window.open(\''+t.yt+'\',\'_blank\')" style="width:100%;background:rgba(255,0,0,.15);border:1px solid rgba(255,0,0,.4);color:#ff6b6b;padding:12px;border-radius:4px;font-family:Montserrat,sans-serif;font-size:10px;letter-spacing:2px;cursor:pointer;margin-bottom:16px;">'+
+        '▶ YouTubeでレースを見る'+
+      '</button>'
+    :'')+
+    '<div class="divider-sm"></div>'+
+    '<div id="del-trophy-area">'+
+      '<button onclick="showDelTrophy('+index+')" style="width:100%;background:transparent;border:1px solid rgba(200,80,80,.3);color:#e05050;padding:8px;font-size:10px;cursor:pointer;border-radius:4px;font-family:Montserrat,sans-serif;letter-spacing:1px;">'+
+        '✕ このトロフィーを削除'+
+      '</button>'+
+    '</div>';
+  document.getElementById("trophy-overlay").classList.add("open");
+  document.body.style.overflow="hidden";
+}
+
+function showDelTrophy(index){
+  var area=document.getElementById("del-trophy-area");
+  area.innerHTML=
+    '<div style="display:flex;gap:8px;align-items:center;margin-top:8px">'+
+      '<input class="pw-input" id="dtp" type="password" placeholder="パスワード" maxlength="10" onkeydown="if(event.key===\'Enter\')doDelTrophy('+index+')">'+
+      '<button onclick="doDelTrophy('+index+')" style="background:#8b0000;border:none;color:white;padding:7px 14px;font-size:10px;cursor:pointer;border-radius:2px;font-family:Montserrat,sans-serif;">削除</button>'+
+    '</div>'+
+    '<div id="dtp-err" class="pw-err">パスワードが違います</div>';
+  setTimeout(function(){document.getElementById("dtp")&&document.getElementById("dtp").focus();},100);
+}
+
+function doDelTrophy(index){
+  if(document.getElementById("dtp").value===PASS){
+    var t=getTrophies(); t.splice(index,1); saveTrophies(t);
+    closeTrophyPanel(); renderTrophies();
+  } else {
+    document.getElementById("dtp-err").style.display="block";
+    document.getElementById("dtp").value="";
+  }
+}
+
+function closeTrophyPanel(){
+  document.getElementById("trophy-overlay").classList.remove("open");
+  document.body.style.overflow="";
+}
+</script>
+</body>
+</html>
