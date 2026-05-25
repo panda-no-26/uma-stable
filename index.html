@@ -30,7 +30,7 @@ body{background:#0a0a0a;color:#e8eaf0;font-family:'Noto Serif JP',serif;min-heig
 .row-info{flex:1;min-width:0;}
 .row-name{font-size:14px;font-weight:700;color:#e8eaf0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .row-sub{font-family:'Montserrat',sans-serif;font-size:8px;color:#b0c4e0;margin-top:2px;}
-.row-class{font-family:'Montserrat',sans-serif;font-size:9px;padding:2px 7px;flex-shrink:0;white-space:nowrap;display:inline-flex;align-items:center;}
+.row-class{font-family:'Montserrat',sans-serif;font-size:9px;padding:2px 7px;flex-shrink:0;white-space:nowrap;display:inline-flex;align-items:center;align-self:center;}
 .row-arrow{color:#3a5a8a;font-size:12px;flex-shrink:0;}
 .footer-txt{text-align:center;padding:20px;font-family:'Montserrat',sans-serif;font-size:8px;letter-spacing:4px;color:rgba(100,140,200,.3);}
 .hint{text-align:center;padding:10px 0 4px;font-family:'Montserrat',sans-serif;font-size:9px;color:#5a7aaa;letter-spacing:2px;}
@@ -363,7 +363,7 @@ function renderHorseList(){
           '<div class="row-name" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0">'+
             h.nameJp+(s?'<span style="margin-left:4px;font-size:10px">'+s+'</span>':'')+
           '</div>'+
-          (raceBadge?'<div style="flex-shrink:0">'+raceBadge+'</div>':'')+
+          (raceBadge?'<div style="flex-shrink:0;display:flex;align-items:center;">'+raceBadge+'</div>':'')+
         '</div>'+
         '<div class="row-sub">'+
           '<span style="font-weight:700;color:#e8eaf0">'+h.age+'</span> · '+
@@ -379,6 +379,9 @@ function renderHorseList(){
 }
 
 renderHorseList();
+
+// 初回読み込み時にサーバーから最新スケジュールを取得して愛馬一覧を更新
+loadSchedulesFromServer(function(){ renderHorseList(); });
 
 // ===== 愛馬パネル =====
 var currentHorseId=null;
@@ -644,10 +647,16 @@ function renderSchedList(){
     var dow=d.getDay();
     var dowColor=dow===0?"#e07070":dow===6?"#7090e0":"#c9a84c";
     var dateStr=(d.getMonth()+1)+"/"+d.getDate()+"（"+'<span style="color:'+dowColor+'">'+dayNames[dow]+'</span>'+"）";
-    html+='<div class="sched-item'+(isPast?" past":'')+'" onclick="openSchedPanel('+i+')">'+
-      '<div class="sched-date">'+dateStr+'</div>'+
-      '<div class="sched-horse">'+s.horse+'</div>'+
-      '<div class="sched-info">'+s.race+(s.dist?" · "+s.dist:"")+(s.jockey?" · "+s.jockey+"騎手":"")+'</div>'+
+    // 該当馬の勝負服を取得
+    var horseData = horses.find(function(h){ return h.nameJp === s.horse; });
+    var silksHtml = horseData ? '<div style="flex-shrink:0;margin-right:10px">'+horseData.sm()+'</div>' : '';
+    html+='<div class="sched-item'+(isPast?" past":'')+'" onclick="openSchedPanel('+i+')" style="display:flex;align-items:center;">'+
+      silksHtml+
+      '<div style="flex:1;min-width:0">'+
+        '<div class="sched-date">'+dateStr+'</div>'+
+        '<div class="sched-horse">'+s.horse+'</div>'+
+        '<div class="sched-info">'+s.race+(s.dist?" · "+s.dist:"")+(s.jockey?" · "+s.jockey+"騎手":"")+'</div>'+
+      '</div>'+
     '</div>';
   });
   document.getElementById("schedule-list").innerHTML=html;
