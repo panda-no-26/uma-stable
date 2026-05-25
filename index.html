@@ -359,11 +359,8 @@ function renderHorseList(){
       '<div class="row-num">'+h.id+'</div>'+
       '<div style="flex-shrink:0">'+h.sm()+'</div>'+
       '<div class="row-info">'+
-        '<div style="display:flex;align-items:center;justify-content:space-between;gap:4px">'+
-          '<div class="row-name" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0">'+
-            h.nameJp+(s?'<span style="margin-left:4px;font-size:10px">'+s+'</span>':'')+
-          '</div>'+
-          (raceBadge?'<div style="flex-shrink:0;display:flex;align-items:center;">'+raceBadge+'</div>':'')+
+        '<div class="row-name">'+
+          h.nameJp+(s?'<span style="margin-left:4px;font-size:10px">'+s+'</span>':'')+
         '</div>'+
         '<div class="row-sub">'+
           '<span style="font-weight:700;color:#e8eaf0">'+h.age+'</span> · '+
@@ -371,6 +368,7 @@ function renderHorseList(){
           h.club+' · '+h.trainer+
         '</div>'+
       '</div>'+
+      (raceBadge?'<div style="flex-shrink:0;align-self:center;">'+raceBadge+'</div>':'')+
       '<div class="row-class" style="color:'+cs.color+';border:'+cs.border+'">'+h.cl+'</div>'+
       '<div class="row-arrow">›</div>';
     row.onclick=function(){openHorsePanel(h);};
