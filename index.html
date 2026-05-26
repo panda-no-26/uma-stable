@@ -16,7 +16,7 @@ body{background:#0a0a0a;color:#e8eaf0;font-family:'Noto Serif JP',serif;min-heig
 .header-title{font-size:22px;font-weight:700;letter-spacing:.15em;color:#e8eaf0;}
 .header-divider{width:80px;height:1px;background:linear-gradient(90deg,transparent,#c9a84c,transparent);margin:12px auto 0;}
 .nav{display:flex;background:#071030;border-bottom:1px solid rgba(255,255,255,0.06);}
-.nav-btn{flex:1;padding:12px 4px;font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:1px;color:#5a7aaa;background:transparent;border:none;border-bottom:3px solid transparent;cursor:pointer;text-align:center;transition:all .2s;text-transform:uppercase;}
+.nav-btn{flex:1;padding:10px 2px;font-family:'Noto Serif JP',serif;font-size:10px;letter-spacing:0;color:#5a7aaa;background:transparent;border:none;border-bottom:3px solid transparent;cursor:pointer;text-align:center;transition:all .2s;white-space:nowrap;overflow:hidden;}
 .nav-btn.active{color:#c9a84c;border-bottom:3px solid #c9a84c;}
 .nav-btn:hover{color:#8aaad8;}
 .page{display:none;}
@@ -32,8 +32,9 @@ body{background:#0a0a0a;color:#e8eaf0;font-family:'Noto Serif JP',serif;min-heig
 .row-sub{font-family:'Montserrat',sans-serif;font-size:8px;color:#b0c4e0;margin-top:2px;}
 .row-class{font-family:'Montserrat',sans-serif;font-size:9px;padding:2px 7px;flex-shrink:0;white-space:nowrap;display:inline-flex;align-items:center;align-self:center;}
 .row-arrow{color:#3a5a8a;font-size:12px;flex-shrink:0;}
+.update-label{font-family:'Montserrat',sans-serif;font-size:9px;color:rgba(150,180,255,.7);letter-spacing:1px;}
 .footer-txt{text-align:center;padding:20px;font-family:'Montserrat',sans-serif;font-size:8px;letter-spacing:4px;color:rgba(100,140,200,.3);}
-.hint{text-align:center;padding:10px 0 4px;font-family:'Montserrat',sans-serif;font-size:9px;color:#5a7aaa;letter-spacing:2px;}
+.hint{text-align:center;padding:12px 0 6px;font-size:13px;color:#7a9acc;letter-spacing:1px;}
 .overlay{position:fixed;inset:0;z-index:100;background:rgba(0,5,20,.85);display:none;align-items:flex-end;animation:fadeIn .2s;}
 .overlay.open{display:flex;}
 .panel{background:#132040;width:100%;max-width:480px;margin:0 auto;border-top:3px solid #c9a84c;border-radius:12px 12px 0 0;padding:24px 24px 36px;max-height:85vh;overflow-y:auto;animation:slideUp .25s ease;}
@@ -92,7 +93,7 @@ body{background:#0a0a0a;color:#e8eaf0;font-family:'Noto Serif JP',serif;min-heig
 
 <div class="header">
   <div class="header-label">My Stable Portfolio</div>
-  <div class="header-title">愛 馬 一 覧</div>
+  <div class="header-title">ぱんP 愛馬一覧</div>
   <div class="header-divider"></div>
 </div>
 
@@ -100,6 +101,7 @@ body{background:#0a0a0a;color:#e8eaf0;font-family:'Noto Serif JP',serif;min-heig
   <button class="nav-btn active" id="nav-stable" onclick="showPage('stable')">🐎 愛馬一覧</button>
   <button class="nav-btn" id="nav-schedule" onclick="showPage('schedule')">📅 スケジュール</button>
   <button class="nav-btn" id="nav-trophy" onclick="showPage('trophy')">🏆 トロフィー</button>
+  <button class="nav-btn" id="nav-profile" onclick="showPage('profile')">👤 プロフィール</button>
 </nav>
 
 <!-- 愛馬一覧 -->
@@ -107,9 +109,9 @@ body{background:#0a0a0a;color:#e8eaf0;font-family:'Noto Serif JP',serif;min-heig
   <div class="hint">タップで詳細を表示</div>
   <div class="list" id="horse-list"></div>
   <div style="padding:0 20px 8px;max-width:480px;margin:0 auto;">
-    <span id="update-date" style="font-family:'Montserrat',sans-serif;font-size:9px;color:rgba(150,180,255,.7);letter-spacing:1px;"></span>
+    <span id="update-date" class="update-label"></span>
   </div>
-  <div class="footer-txt">✦ HITONUCHI UMANUSHI · 2026 ✦</div>
+  <div class="footer-txt">✦ HITOUCHI UMANUSHI · 2026 ✦</div>
 </div>
 
 <!-- トロフィールーム -->
@@ -120,7 +122,152 @@ body{background:#0a0a0a;color:#e8eaf0;font-family:'Noto Serif JP',serif;min-heig
     <div style="width:80px;height:1px;background:linear-gradient(90deg,transparent,#c9a84c,transparent);margin:12px auto 0;"></div>
   </div>
   <div class="trophy-grid" id="trophy-grid"></div>
-  <div class="footer-txt">✦ HITONUCHI UMANUSHI · 2026 ✦</div>
+  <div style="padding:0 20px 8px;max-width:480px;margin:0 auto;"><span class="update-label"></span></div>
+  <div class="footer-txt">✦ HITOUCHI UMANUSHI · 2026 ✦</div>
+</div>
+
+<!-- プロフィール -->
+<div id="page-profile" class="page">
+  <div style="text-align:center;padding:28px 20px 20px;background:#0a0a0a;">
+    <div style="font-family:'Montserrat',sans-serif;font-size:9px;letter-spacing:4px;color:#c9a84c;margin-bottom:8px;">PROFILE</div>
+    <div style="font-size:20px;font-weight:700;letter-spacing:.1em;color:#e8eaf0;">プ ロ フ ィ ー ル</div>
+    <div style="width:80px;height:1px;background:linear-gradient(90deg,transparent,#c9a84c,transparent);margin:12px auto 0;"></div>
+  </div>
+  <div style="max-width:480px;margin:0 auto;padding:24px 20px 60px;font-family:'Meiryo UI','Meiryo','メイリオ',sans-serif;">
+    <!-- アイコンなし -->
+    <div style="text-align:center;margin-bottom:24px;">
+      <div style="font-size:20px;font-weight:700;color:#e8eaf0;margin-bottom:4px;">ぱんP</div>
+      <div style="font-family:'Montserrat',sans-serif;font-size:10px;color:#6a8aaa;letter-spacing:3px;">HITOUCHI UMANUSHI</div>
+    </div>
+    <div style="height:1px;background:linear-gradient(90deg,rgba(201,168,76,.4),transparent);margin-bottom:20px;"></div>
+    <!-- メッセージ（最上部） -->
+    <div style="font-family:'Montserrat',sans-serif;font-size:9px;color:#c9a84c;letter-spacing:3px;margin-bottom:12px;">MESSAGE</div>
+    <div id="profile-message" style="background:#132040;border-radius:8px;padding:16px;font-size:13px;line-height:1.9;color:rgba(232,234,240,.8);min-height:80px;">
+      二十歳の時、雑誌広告で一口馬主制度を知りキャロットクラブに入会。<br>その後は細々と続けていたが、コロナ禍をきっかけに一口熱が一気に燃え上がり、現在に至る。<br><br>いつかGⅠ制覇を夢見て、今日も愛馬を応援中。🏆
+    </div>
+    <button onclick="editProfile()" style="width:100%;background:transparent;border:1px dashed rgba(122,138,170,.3);color:#4a5a7a;padding:12px;font-size:10px;letter-spacing:2px;cursor:pointer;border-radius:4px;margin-top:12px;">✏️ メッセージを編集</button>
+    <div id="profile-edit" style="display:none;margin-top:12px;">
+      <textarea id="profile-textarea" style="width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(100,140,200,.25);color:#e8eaf0;padding:12px;font-size:13px;border-radius:4px;outline:none;line-height:1.9;resize:none;height:120px;font-family:serif;"></textarea>
+      <input class="t-input" id="profile-pw" type="password" placeholder="パスワード" style="margin-top:8px;" onkeydown="if(event.key==='Enter')saveProfile()">
+      <div id="profile-pw-err" class="pw-err">パスワードが違います</div>
+      <button class="t-save-btn" onclick="saveProfile()" style="margin-top:4px;">保存する</button>
+      <button class="t-cancel-btn" onclick="document.getElementById('profile-edit').style.display='none'">キャンセル</button>
+    </div>
+    <div style="height:1px;background:linear-gradient(90deg,rgba(201,168,76,.2),transparent);margin:20px 0;"></div>
+    <!-- 成績 -->
+    <div style="font-family:'Montserrat',sans-serif;font-size:9px;color:#c9a84c;letter-spacing:3px;margin-bottom:12px;">MY STABLE</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px;">
+      <div style="background:#132040;border-radius:8px;padding:14px;text-align:center;">
+        <div style="font-family:'Montserrat',sans-serif;font-size:9px;color:#c9a84c;letter-spacing:2px;margin-bottom:6px;">愛馬</div>
+        <div style="font-size:28px;font-weight:800;color:#c9a84c;font-family:'Montserrat',sans-serif;">9<span style="font-size:16px;font-weight:700;">頭</span></div>
+        <div style="font-family:'Montserrat',sans-serif;font-size:9px;color:#c9a84c;opacity:.6;margin-top:4px;font-weight:700;">（通算31頭）</div>
+      </div>
+      <div style="background:#132040;border-radius:8px;padding:14px;text-align:center;">
+        <div style="font-family:'Montserrat',sans-serif;font-size:9px;color:#c9a84c;letter-spacing:2px;margin-bottom:6px;">2026勝利</div>
+        <div style="font-size:28px;font-weight:800;color:#c9a84c;font-family:'Montserrat',sans-serif;">3<span style="font-size:16px;font-weight:700;">勝</span></div>
+        <div style="font-family:'Montserrat',sans-serif;font-size:9px;color:#c9a84c;opacity:.6;margin-top:4px;font-weight:700;">（通算35勝）</div>
+      </div>
+    </div>
+    <div style="height:1px;background:linear-gradient(90deg,rgba(201,168,76,.2),transparent);margin-bottom:20px;"></div>
+    <!-- 勝利グラフ -->
+    <div style="font-family:'Montserrat',sans-serif;font-size:9px;color:#c9a84c;letter-spacing:3px;margin-bottom:12px;">WINS BY YEAR</div>
+    <div style="background:#132040;border-radius:8px;padding:12px 8px 10px;margin-bottom:24px;">
+      <svg viewBox="0 0 420 190" style="width:100%;" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="lineGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#c9a84c" stop-opacity="0.3"/>
+            <stop offset="100%" stop-color="#c9a84c" stop-opacity="0.02"/>
+          </linearGradient>
+        </defs>
+        <!-- 勝利数ラベル（左端・5より上） -->
+        <text x="4" y="12" text-anchor="start" font-size="8" fill="rgba(201,168,76,.8)" font-family="Montserrat,sans-serif" font-weight="bold">勝利数</text>
+        <!-- 年ラベル -->
+        <text x="408" y="170" text-anchor="middle" font-size="9" fill="rgba(201,168,76,.7)" font-family="Montserrat,sans-serif" font-weight="bold">年</text>
+        <!-- 軸 -->
+        <line x1="44" y1="20" x2="44" y2="148" stroke="rgba(100,140,200,.25)" stroke-width="1.5"/>
+        <line x1="44" y1="148" x2="412" y2="148" stroke="rgba(100,140,200,.25)" stroke-width="1.5"/>
+        <!-- グリッド y=148-(勝利*25.6): 0→148,1→122,2→97,3→71,4→46,5→20 -->
+        <line x1="44" y1="20"  x2="412" y2="20"  stroke="rgba(100,140,200,.1)" stroke-width="0.5" stroke-dasharray="4,3"/>
+        <line x1="44" y1="46"  x2="412" y2="46"  stroke="rgba(100,140,200,.1)" stroke-width="0.5" stroke-dasharray="4,3"/>
+        <line x1="44" y1="71"  x2="412" y2="71"  stroke="rgba(100,140,200,.1)" stroke-width="0.5" stroke-dasharray="4,3"/>
+        <line x1="44" y1="97"  x2="412" y2="97"  stroke="rgba(100,140,200,.1)" stroke-width="0.5" stroke-dasharray="4,3"/>
+        <line x1="44" y1="122" x2="412" y2="122" stroke="rgba(100,140,200,.1)" stroke-width="0.5" stroke-dasharray="4,3"/>
+        <!-- Y軸数値 -->
+        <text x="38" y="23"  text-anchor="end" font-size="9" fill="rgba(106,138,170,.7)" font-family="Montserrat,sans-serif" font-weight="bold">5</text>
+        <text x="38" y="49"  text-anchor="end" font-size="9" fill="rgba(106,138,170,.7)" font-family="Montserrat,sans-serif" font-weight="bold">4</text>
+        <text x="38" y="74"  text-anchor="end" font-size="9" fill="rgba(106,138,170,.7)" font-family="Montserrat,sans-serif" font-weight="bold">3</text>
+        <text x="38" y="100" text-anchor="end" font-size="9" fill="rgba(106,138,170,.7)" font-family="Montserrat,sans-serif" font-weight="bold">2</text>
+        <text x="38" y="125" text-anchor="end" font-size="9" fill="rgba(106,138,170,.7)" font-family="Montserrat,sans-serif" font-weight="bold">1</text>
+        <!-- x間隔20px: 54,74,94,114,134,154,174,194,214,234,254,274,294,314,334,354,374,394 -->
+        <!-- y: 08:148,09:122,10:148,11:148,12:71,13:71,14:122,15:71,16:97,17:148,18:148,19:122,20:148,21:20,22:46,23:97,24:46,25:71,26:71 -->
+        <polygon points="54,148 54,148 74,122 94,148 114,148 134,71 154,71 174,122 194,71 214,97 234,148 254,148 274,122 294,148 314,20 334,46 354,97 374,46 394,71 394,148" fill="url(#lineGrad)"/>
+        <polyline points="54,148 74,122 94,148 114,148 134,71 154,71 174,122 194,71 214,97 234,148 254,148 274,122 294,148 314,20 334,46 354,97 374,46 394,71"
+          fill="none" stroke="#c9a84c" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
+        <!-- 全ポイント統一：青丸 -->
+        <circle cx="54"  cy="148" r="3" fill="#132040" stroke="#5a8abb" stroke-width="1.5"/>
+        <circle cx="74"  cy="122" r="3" fill="#132040" stroke="#6a9acc" stroke-width="1.5"/>
+        <circle cx="94"  cy="148" r="3" fill="#132040" stroke="#5a8abb" stroke-width="1.5"/>
+        <circle cx="114" cy="148" r="3" fill="#132040" stroke="#5a8abb" stroke-width="1.5"/>
+        <circle cx="134" cy="71"  r="3" fill="#132040" stroke="#7ab4d8" stroke-width="1.5"/>
+        <circle cx="154" cy="71"  r="3" fill="#132040" stroke="#7ab4d8" stroke-width="1.5"/>
+        <circle cx="174" cy="122" r="3" fill="#132040" stroke="#6a9acc" stroke-width="1.5"/>
+        <circle cx="194" cy="71"  r="3" fill="#132040" stroke="#7ab4d8" stroke-width="1.5"/>
+        <circle cx="214" cy="97"  r="3" fill="#132040" stroke="#6a9acc" stroke-width="1.5"/>
+        <circle cx="234" cy="148" r="3" fill="#132040" stroke="#5a8abb" stroke-width="1.5"/>
+        <circle cx="254" cy="148" r="3" fill="#132040" stroke="#5a8abb" stroke-width="1.5"/>
+        <circle cx="274" cy="122" r="3" fill="#132040" stroke="#6a9acc" stroke-width="1.5"/>
+        <circle cx="294" cy="148" r="3" fill="#132040" stroke="#5a8abb" stroke-width="1.5"/>
+        <circle cx="314" cy="20"  r="3" fill="#132040" stroke="#7ab4d8" stroke-width="1.5"/>
+        <circle cx="334" cy="46"  r="3" fill="#132040" stroke="#7ab4d8" stroke-width="1.5"/>
+        <circle cx="354" cy="97"  r="3" fill="#132040" stroke="#6a9acc" stroke-width="1.5"/>
+        <circle cx="374" cy="46"  r="3" fill="#132040" stroke="#7ab4d8" stroke-width="1.5"/>
+        <circle cx="394" cy="71"  r="3" fill="#132040" stroke="#7ab4d8" stroke-width="1.5"/>
+        <!-- 数値ラベル（ポイントの上） -->
+        <text x="314" y="14"  text-anchor="middle" font-size="10" fill="#c9a84c" font-family="Montserrat,sans-serif" font-weight="bold">5</text>
+        <text x="334" y="40"  text-anchor="middle" font-size="9"  fill="rgba(150,200,240,.9)" font-family="Montserrat,sans-serif" font-weight="bold">4</text>
+        <text x="374" y="40"  text-anchor="middle" font-size="9"  fill="rgba(150,200,240,.9)" font-family="Montserrat,sans-serif" font-weight="bold">4</text>
+        <text x="134" y="65"  text-anchor="middle" font-size="9"  fill="rgba(150,200,240,.9)" font-family="Montserrat,sans-serif" font-weight="bold">3</text>
+        <text x="154" y="65"  text-anchor="middle" font-size="9"  fill="rgba(150,200,240,.9)" font-family="Montserrat,sans-serif" font-weight="bold">3</text>
+        <text x="194" y="65"  text-anchor="middle" font-size="9"  fill="rgba(150,200,240,.9)" font-family="Montserrat,sans-serif" font-weight="bold">3</text>
+        <text x="394" y="65"  text-anchor="middle" font-size="9"  fill="rgba(150,200,240,.9)" font-family="Montserrat,sans-serif" font-weight="bold">3</text>
+        <!-- X軸ラベル -->
+        <text x="54"  y="162" text-anchor="middle" font-size="8" fill="rgba(106,138,170,.7)" font-family="Montserrat,sans-serif" font-weight="600">'08</text>
+        <text x="134" y="162" text-anchor="middle" font-size="8" fill="rgba(106,138,170,.7)" font-family="Montserrat,sans-serif" font-weight="600">'12</text>
+        <text x="194" y="162" text-anchor="middle" font-size="8" fill="rgba(106,138,170,.7)" font-family="Montserrat,sans-serif" font-weight="600">'15</text>
+        <text x="254" y="162" text-anchor="middle" font-size="8" fill="rgba(106,138,170,.7)" font-family="Montserrat,sans-serif" font-weight="600">'18</text>
+        <text x="314" y="162" text-anchor="middle" font-size="8" fill="rgba(106,138,170,.7)" font-family="Montserrat,sans-serif" font-weight="600">'21</text>
+        <text x="374" y="162" text-anchor="middle" font-size="8" fill="rgba(106,138,170,.7)" font-family="Montserrat,sans-serif" font-weight="600">'24</text>
+        <text x="394" y="162" text-anchor="middle" font-size="8" fill="rgba(106,138,170,.7)" font-family="Montserrat,sans-serif" font-weight="600">'26</text>
+      </svg>
+    </div>
+    <!-- クラブ -->
+    <div style="font-family:'Montserrat',sans-serif;font-size:9px;color:#c9a84c;letter-spacing:3px;margin-bottom:12px;">CLUBS</div>
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:24px;">
+      <!-- サンデーレーシング：赤・黒・黄 -->
+      <div style="background:#132040;border-radius:6px;padding:12px 16px;display:flex;align-items:center;gap:6px;">
+        <div style="width:8px;height:8px;border-radius:50%;background:#cc2200;flex-shrink:0;"></div>
+        <div style="width:8px;height:8px;border-radius:50%;background:#1a1a1a;flex-shrink:0;"></div>
+        <div style="width:8px;height:8px;border-radius:50%;background:#e6c800;flex-shrink:0;"></div>
+        <span style="color:#e8eaf0;font-size:13px;margin-left:6px;">サンデーレーシング</span>
+      </div>
+      <!-- G1レーシング：赤・黒 + spacer -->
+      <div style="background:#132040;border-radius:6px;padding:12px 16px;display:flex;align-items:center;gap:6px;">
+        <div style="width:8px;height:8px;border-radius:50%;background:#cc2200;flex-shrink:0;"></div>
+        <div style="width:8px;height:8px;border-radius:50%;background:#1a1a1a;flex-shrink:0;"></div>
+        <div style="width:8px;height:8px;flex-shrink:0;"></div>
+        <span style="color:#e8eaf0;font-size:13px;margin-left:6px;">G1レーシング</span>
+      </div>
+      <!-- キャロットクラブ：緑・白・赤 -->
+      <div style="background:#132040;border-radius:6px;padding:12px 16px;display:flex;align-items:center;gap:6px;">
+        <div style="width:8px;height:8px;border-radius:50%;background:#1a7a1a;flex-shrink:0;"></div>
+        <div style="width:8px;height:8px;border-radius:50%;background:#e8e8e8;flex-shrink:0;border:1px solid rgba(200,200,200,.3);"></div>
+        <div style="width:8px;height:8px;border-radius:50%;background:#cc2200;flex-shrink:0;"></div>
+        <span style="color:#e8eaf0;font-size:13px;margin-left:6px;">キャロットクラブ</span>
+      </div>
+    </div>
+  </div>
+  <div style="padding:0 20px 8px;max-width:480px;margin:0 auto;"><span class="update-label"></span></div>
+  <div class="footer-txt">✦ HITOUCHI UMANUSHI · 2026 ✦</div>
 </div>
 
 <!-- スケジュール -->
@@ -161,7 +308,8 @@ body{background:#0a0a0a;color:#e8eaf0;font-family:'Noto Serif JP',serif;min-heig
     </div>
   </div>
 
-  <div class="footer-txt">✦ HITONUCHI UMANUSHI · 2026 ✦</div>
+  <div style="padding:0 20px 8px;max-width:480px;margin:0 auto;"><span class="update-label"></span></div>
+  <div class="footer-txt">✦ HITOUCHI UMANUSHI · 2026 ✦</div>
 </div>
 
 <!-- スケジュール詳細パネル -->
@@ -203,8 +351,7 @@ var _trophies = null;
   fetch(GAS_URL + '?action=getUpdated')
     .then(function(r){ return r.json(); })
     .then(function(d){
-      var el = document.getElementById("update-date");
-      if(el && d.updated) el.textContent = "UPDATED " + d.updated;
+      if(d.updated) updateAllDateLabels(d.updated);
     }).catch(function(){});
 })();
 
@@ -478,14 +625,16 @@ function closeHorsePanel(){
 
 // ===== ナビ =====
 function showPage(page){
-  document.getElementById("page-stable").classList.remove("active");
-  document.getElementById("page-schedule").classList.remove("active");
-  document.getElementById("page-trophy").classList.remove("active");
-  document.getElementById("nav-stable").classList.remove("active");
-  document.getElementById("nav-schedule").classList.remove("active");
-  document.getElementById("nav-trophy").classList.remove("active");
-  document.getElementById("page-"+page).classList.add("active");
-  document.getElementById("nav-"+page).classList.add("active");
+  ["stable","schedule","trophy","profile"].forEach(function(p){
+    var el = document.getElementById("page-"+p);
+    var nav = document.getElementById("nav-"+p);
+    if(el) el.classList.remove("active");
+    if(nav) nav.classList.remove("active");
+  });
+  var pageEl = document.getElementById("page-"+page);
+  var navEl = document.getElementById("nav-"+page);
+  if(pageEl) pageEl.classList.add("active");
+  if(navEl) navEl.classList.add("active");
   if(page==="stable"){
     loadSchedulesFromServer(function(){ renderHorseList(); });
   }
@@ -497,6 +646,42 @@ function showPage(page){
     showLoading("schedule-list");
     loadSchedulesFromServer(function(){ renderSchedule(); });
   }
+}
+
+function updateAllDateLabels(dateStr){
+  document.querySelectorAll(".update-label").forEach(function(el){
+    el.textContent = "UPDATED " + dateStr;
+  });
+  var el = document.getElementById("update-date");
+  if(el) el.textContent = "UPDATED " + dateStr;
+}
+
+// ===== プロフィール =====
+(function(){
+  var msg = localStorage.getItem("profile_message");
+  var el = document.getElementById("profile-message");
+  if(msg && el) el.innerHTML = msg;
+})();
+
+function editProfile(){
+  var current = document.getElementById("profile-message").innerText;
+  document.getElementById("profile-textarea").value = current;
+  document.getElementById("profile-edit").style.display = "block";
+}
+
+function saveProfile(){
+  var pw = document.getElementById("profile-pw").value;
+  if(pw !== PASS){
+    document.getElementById("profile-pw-err").style.display = "block";
+    document.getElementById("profile-pw").value = "";
+    return;
+  }
+  var msg = document.getElementById("profile-textarea").value;
+  var html = msg.replace(/\n/g, "<br>");
+  document.getElementById("profile-message").innerHTML = html;
+  localStorage.setItem("profile_message", html);
+  document.getElementById("profile-edit").style.display = "none";
+  document.getElementById("profile-pw").value = "";
 }
 
 function showLoading(id){
@@ -527,7 +712,7 @@ function saveSchedules(data){
     .then(function(d){
       if(d.updated){
         var el = document.getElementById("update-date");
-        if(el) el.textContent = "UPDATED " + d.updated;
+        if(d.updated) updateAllDateLabels(d.updated);
       }
     }).catch(function(){});
 }
@@ -570,8 +755,11 @@ function calMove(dir){
 }
 
 function renderCal(){
+  var titleEl=document.getElementById("cal-title");
+  var gridEl=document.getElementById("cal-grid");
+  if(!titleEl||!gridEl) return;
   var months=["January","February","March","April","May","June","July","August","September","October","November","December"];
-  document.getElementById("cal-title").textContent=calYear+"年 "+( calMonth+1)+"月";
+  titleEl.textContent=calYear+"年 "+( calMonth+1)+"月";
   var schedules=getSchedules();
   var raceDates={};
   schedules.forEach(function(s){
@@ -612,7 +800,7 @@ function renderCal(){
   for(var i=1;i<=remaining;i++){
     html+='<div class="cal-day cal-other"><div class="cal-num">'+i+'</div></div>';
   }
-  document.getElementById("cal-grid").innerHTML=html;
+  if(gridEl) gridEl.innerHTML=html;
 }
 
 function calDayClick(day){
@@ -657,7 +845,9 @@ function renderSchedList(){
       '</div>'+
     '</div>';
   });
-  document.getElementById("schedule-list").innerHTML=html;
+  var listEl=document.getElementById("schedule-list");
+  if(!listEl) return;
+  listEl.innerHTML=html;
 }
 
 function toggleSchedForm(){
@@ -766,7 +956,7 @@ function saveTrophies(data){
     .then(function(d){
       if(d.updated){
         var el = document.getElementById("update-date");
-        if(el) el.textContent = "UPDATED " + d.updated;
+        if(d.updated) updateAllDateLabels(d.updated);
       }
     }).catch(function(){});
 }
@@ -794,6 +984,7 @@ function loadTrophiesFromServer(callback){
 
 function renderTrophies(){
   var grid=document.getElementById("trophy-grid");
+  if(!grid) return;
   var trophies=getTrophies();
   var html="";
   trophies.forEach(function(t,i){
