@@ -335,6 +335,9 @@ body{background:#0a0a0a;color:#e8eaf0;font-family:'Noto Serif JP',serif;min-heig
 <script>
 // ===== Google Apps Script API =====
 var GAS_URL = 'https://script.google.com/macros/s/AKfycbwTH9JEVDoNFJuSBcnX3fNVf43DsPuekX5qkL0gkn1jTnAmoDYIk1yrjwS8nrbhJxGS7Q/exec';
+var _lsCache = {};
+function lsGet(k){ try{ return lsGet(k); }catch(e){ return _lsCache[k]||null; } }
+function lsSet(k,v){ try{ lsSet(k,v); }catch(e){ _lsCache[k]=v; } }
 var PASS = '5017';
 var _schedules = null;
 var _trophies = null;
@@ -467,9 +470,9 @@ var horses = [
    sm:function(){return carrotSVG("7s",36);},lg:function(){return carrotSVG("7l",64);}},
   {id:9,nameJp:"ベルグラース",nameEn:"Belle Grace",age:"2歳",gender:"牝",gc:"#e88aaa",
    sire:"マインドユアビスケッツ",dam:"ベルディーヴァ",trainer:"美浦・浅利英明",club:"キャロットクラブ",
-   cl:"デビュー前",ck:"pre",wins:null,
+   cl:"未勝利",ck:"novice",wins:0,
    origin:"フランス語で「美しい優雅さ（Belle Grace）」。母名ベルディーヴァより連想。",
-   note:"父マインドユアビスケッツ×母ベルディーヴァ。2024年産の2歳牝馬。育成中。",
+   note:"7/4福島6Rメイクデビュー（ダート1,700m）杉原誠人騎手で出走、結果は未勝利。次走に向けて。",
    sm:function(){return carrotSVG("9s",36);},lg:function(){return carrotSVG("9l",64);}},
   {id:10,nameJp:"インキュナブラ",nameEn:"Incunabula",age:"3歳",gender:"牝",gc:"#e88aaa",
    sire:"ロゴタイプ",dam:"デロングスター",trainer:"船橋・佐藤裕太",club:"社台オーナーズ",
@@ -672,7 +675,7 @@ function updateAllDateLabels(dateStr){
 
 // ===== プロフィール =====
 (function(){
-  var msg = localStorage.getItem("profile_message");
+  var msg = lsGet("profile_message");
   var el = document.getElementById("profile-message");
   if(msg && el) el.innerHTML = msg;
 })();
@@ -693,7 +696,7 @@ function saveProfile(){
   var msg = document.getElementById("profile-textarea").value;
   var html = msg.replace(/\n/g, "<br>");
   document.getElementById("profile-message").innerHTML = html;
-  localStorage.setItem("profile_message", html);
+  lsSet("profile_message", html);
   document.getElementById("profile-edit").style.display = "none";
   document.getElementById("profile-pw").value = "";
 }
@@ -714,11 +717,11 @@ var calYear, calMonth;
 // ===== アクセスカウンター =====
 function getSchedules(){
   if (_schedules !== null) return _schedules;
-  try { return JSON.parse(localStorage.getItem("schedules_cache")||"[]"); } catch(e) { return []; }
+  try { return JSON.parse(lsGet("schedules_cache")||"[]"); } catch(e) { return []; }
 }
 function saveSchedules(data){
   _schedules = data;
-  localStorage.setItem("schedules_cache", JSON.stringify(data));
+  lsSet("schedules_cache", JSON.stringify(data));
   fetch(GAS_URL, {
     method:'POST',
     body: JSON.stringify({action:'saveSchedules', pass:PASS, data:data})
@@ -732,7 +735,7 @@ function saveSchedules(data){
 }
 function loadSchedulesFromServer(callback){
   // まずキャッシュで即時表示
-  var cached = localStorage.getItem("schedules_cache");
+  var cached = lsGet("schedules_cache");
   if(cached){
     try{
       _schedules = JSON.parse(cached);
@@ -744,9 +747,9 @@ function loadSchedulesFromServer(callback){
     .then(function(r){ return r.json(); })
     .then(function(data){
       var newStr = JSON.stringify(data);
-      var oldStr = localStorage.getItem("schedules_cache")||"[]";
+      var oldStr = lsGet("schedules_cache")||"[]";
       _schedules = data;
-      localStorage.setItem("schedules_cache", newStr);
+      lsSet("schedules_cache", newStr);
       // 差分があれば自動更新（スケジュールと愛馬一覧の両方）
       if(newStr !== oldStr){
         renderSchedule();
@@ -958,11 +961,11 @@ var gradeMap={
 
 function getTrophies(){
   if (_trophies !== null) return _trophies;
-  try { return JSON.parse(localStorage.getItem("trophies_cache")||"[]"); } catch(e) { return []; }
+  try { return JSON.parse(lsGet("trophies_cache")||"[]"); } catch(e) { return []; }
 }
 function saveTrophies(data){
   _trophies = data;
-  localStorage.setItem("trophies_cache", JSON.stringify(data));
+  lsSet("trophies_cache", JSON.stringify(data));
   fetch(GAS_URL, {
     method:'POST',
     body: JSON.stringify({action:'saveTrophies', pass:PASS, data:data})
@@ -976,7 +979,7 @@ function saveTrophies(data){
 }
 function loadTrophiesFromServer(callback){
   // まずキャッシュで即時表示
-  var cached = localStorage.getItem("trophies_cache");
+  var cached = lsGet("trophies_cache");
   if(cached){
     try{
       _trophies = JSON.parse(cached);
@@ -988,9 +991,9 @@ function loadTrophiesFromServer(callback){
     .then(function(r){ return r.json(); })
     .then(function(data){
       var newStr = JSON.stringify(data);
-      var oldStr = localStorage.getItem("trophies_cache")||"[]";
+      var oldStr = lsGet("trophies_cache")||"[]";
       _trophies = data;
-      localStorage.setItem("trophies_cache", newStr);
+      lsSet("trophies_cache", newStr);
       if(newStr !== oldStr) renderTrophies();
     })
     .catch(function(){});
