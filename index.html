@@ -156,8 +156,8 @@ body{background:#0a0a0a;color:#e8eaf0;font-family:'Noto Serif JP',serif;min-heig
       </div>
       <div style="background:#132040;border-radius:8px;padding:14px;text-align:center;">
         <div style="font-family:'Montserrat',sans-serif;font-size:9px;color:#c9a84c;letter-spacing:2px;margin-bottom:6px;">2026勝利</div>
-        <div style="font-size:28px;font-weight:800;color:#c9a84c;font-family:'Montserrat',sans-serif;">3<span style="font-size:16px;font-weight:700;">勝</span></div>
-        <div style="font-family:'Montserrat',sans-serif;font-size:9px;color:#c9a84c;opacity:.6;margin-top:4px;font-weight:700;">（通算35勝）</div>
+        <div style="font-size:28px;font-weight:800;color:#c9a84c;font-family:'Montserrat',sans-serif;">4<span style="font-size:16px;font-weight:700;">勝</span></div>
+        <div style="font-family:'Montserrat',sans-serif;font-size:9px;color:#c9a84c;opacity:.6;margin-top:4px;font-weight:700;">（通算36勝）</div>
       </div>
     </div>
     <div style="height:1px;background:linear-gradient(90deg,rgba(201,168,76,.2),transparent);margin-bottom:20px;"></div>
@@ -192,8 +192,8 @@ body{background:#0a0a0a;color:#e8eaf0;font-family:'Noto Serif JP',serif;min-heig
         <text x="38" y="125" text-anchor="end" font-size="9" fill="rgba(106,138,170,.7)" font-family="Montserrat,sans-serif" font-weight="bold">1</text>
         <!-- x間隔20px: 54,74,94,114,134,154,174,194,214,234,254,274,294,314,334,354,374,394 -->
         <!-- y: 08:148,09:122,10:148,11:148,12:71,13:71,14:122,15:71,16:97,17:148,18:148,19:122,20:148,21:20,22:46,23:97,24:46,25:71,26:71 -->
-        <polygon points="54,148 54,148 74,122 94,148 114,148 134,71 154,71 174,122 194,71 214,97 234,148 254,148 274,122 294,148 314,20 334,46 354,97 374,46 394,71 394,148" fill="url(#lineGrad)"/>
-        <polyline points="54,148 74,122 94,148 114,148 134,71 154,71 174,122 194,71 214,97 234,148 254,148 274,122 294,148 314,20 334,46 354,97 374,46 394,71"
+        <polygon points="54,148 54,148 74,122 94,148 114,148 134,71 154,71 174,122 194,71 214,97 234,148 254,148 274,122 294,148 314,20 334,46 354,97 374,46 394,46 394,148" fill="url(#lineGrad)"/>
+        <polyline points="54,148 74,122 94,148 114,148 134,71 154,71 174,122 194,71 214,97 234,148 254,148 274,122 294,148 314,20 334,46 354,97 374,46 394,46"
           fill="none" stroke="#c9a84c" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>
         <!-- 全ポイント統一：青丸 -->
         <circle cx="54"  cy="148" r="3" fill="#132040" stroke="#5a8abb" stroke-width="1.5"/>
@@ -213,7 +213,7 @@ body{background:#0a0a0a;color:#e8eaf0;font-family:'Noto Serif JP',serif;min-heig
         <circle cx="334" cy="46"  r="3" fill="#132040" stroke="#7ab4d8" stroke-width="1.5"/>
         <circle cx="354" cy="97"  r="3" fill="#132040" stroke="#6a9acc" stroke-width="1.5"/>
         <circle cx="374" cy="46"  r="3" fill="#132040" stroke="#7ab4d8" stroke-width="1.5"/>
-        <circle cx="394" cy="71"  r="3" fill="#132040" stroke="#7ab4d8" stroke-width="1.5"/>
+        <circle cx="394" cy="46"  r="3" fill="#132040" stroke="#7ab4d8" stroke-width="1.5"/>
         <!-- 数値ラベル（ポイントの上） -->
         <text x="314" y="14"  text-anchor="middle" font-size="10" fill="#c9a84c" font-family="Montserrat,sans-serif" font-weight="bold">5</text>
         <text x="334" y="40"  text-anchor="middle" font-size="9"  fill="rgba(150,200,240,.9)" font-family="Montserrat,sans-serif" font-weight="bold">4</text>
@@ -221,7 +221,7 @@ body{background:#0a0a0a;color:#e8eaf0;font-family:'Noto Serif JP',serif;min-heig
         <text x="134" y="65"  text-anchor="middle" font-size="9"  fill="rgba(150,200,240,.9)" font-family="Montserrat,sans-serif" font-weight="bold">3</text>
         <text x="154" y="65"  text-anchor="middle" font-size="9"  fill="rgba(150,200,240,.9)" font-family="Montserrat,sans-serif" font-weight="bold">3</text>
         <text x="194" y="65"  text-anchor="middle" font-size="9"  fill="rgba(150,200,240,.9)" font-family="Montserrat,sans-serif" font-weight="bold">3</text>
-        <text x="394" y="65"  text-anchor="middle" font-size="9"  fill="rgba(150,200,240,.9)" font-family="Montserrat,sans-serif" font-weight="bold">3</text>
+        <text x="394" y="40"  text-anchor="middle" font-size="9"  fill="rgba(150,200,240,.9)" font-family="Montserrat,sans-serif" font-weight="bold">4</text>
         <!-- X軸ラベル -->
         <text x="54"  y="162" text-anchor="middle" font-size="8" fill="rgba(106,138,170,.7)" font-family="Montserrat,sans-serif" font-weight="600">'08</text>
         <text x="134" y="162" text-anchor="middle" font-size="8" fill="rgba(106,138,170,.7)" font-family="Montserrat,sans-serif" font-weight="600">'12</text>
@@ -351,6 +351,7 @@ var _trophies = null;
 })();
 
 var classStyle = {
+  open:   {color:"#e85050",border:"1px solid rgba(232,80,80,0.6)"},
   three:  {color:"#e8a84c",border:"1px solid rgba(232,168,76,0.6)"},
   two:    {color:"#c07adc",border:"1px solid rgba(160,90,200,0.5)"},
   one:    {color:"#7ab4d8",border:"1px solid rgba(70,130,180,0.5)"},
@@ -458,9 +459,9 @@ var horses = [
    sm:function(){return carrotSVG("6s",36);},lg:function(){return carrotSVG("6l",64);}},
   {id:7,nameJp:"レゾルーティオ",nameEn:"Resolutio",age:"2歳",gender:"牡",gc:"#6ab0e0",
    sire:"サトノクラウン",dam:"ヴィレンスクラフト",trainer:"栗東・坂口智康",club:"サンデーTC",
-   cl:"未勝利",ck:"novice",wins:0,
+   cl:"2歳オープン",ck:"open",wins:1,
    origin:"ラテン語で「決意・解決」の意。堂々たるデビューへの願いを込めて。",
-   note:"6/7阪神5Rメイクデビュー（芝1,400m）西村淳也騎手で出走、結果は未勝利。次走に向けて。",
+   note:"6/7阪神5Rメイクデビュー（芝1,400m）西村淳也騎手で出走し未勝利。その後未勝利戦を勝利し2歳オープン入り。",
    sm:function(){return sundaySVG(36);},lg:function(){return sundaySVG(64);}},
   {id:8,nameJp:"デュアルサイン",nameEn:"Dual Sign",age:"2歳",gender:"牡",gc:"#6ab0e0",
    sire:"スワーヴリチャード",dam:"メサルティム",trainer:"栗東・武幸四郎",club:"キャロットクラブ",
@@ -483,7 +484,7 @@ var horses = [
 ];
 
 function starsStr(ck){
-  var n=ck==="three"?3:ck==="two"?2:ck==="one"?1:0;
+  var n=ck==="three"?3:ck==="two"?2:ck==="one"?1:ck==="open"?1:0;
   return n>0?"⭐".repeat(n):"";
 }
 
