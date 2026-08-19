@@ -445,12 +445,7 @@ var horses = [
    origin:"アジサイの品種名より。母名スペルオンミーより連想。",
    note:"欧州快速馬シスキン産駒。エルフストラックとは異父きょうだい。兄姉にエルフストラック・パラサイコロジー・スマイルオンミー。",
    sm:function(){return sundaySVG(36);},lg:function(){return sundaySVG(64);}},
-  {id:5,nameJp:"ラジャブルック",nameEn:"Rajah Brooke",age:"3歳",gender:"牡",gc:"#6ab0e0",
-   sire:"ナダル",dam:"リャスナ",trainer:"栗東・髙野友和",club:"キャロットクラブ",
-   cl:"未勝利",ck:"novice",wins:0,
-   origin:"マレーシアの国蝶より。競馬場で華麗に舞ってほしいという願いを込めて。",
-   note:"父はBCジュベナイルスプリント覇者ナダル。母リャスナは父ディープインパクト産駒。",
-   sm:function(){return carrotSVG("5s",36);},lg:function(){return carrotSVG("5l",64);}},
+
   {id:6,nameJp:"ギャニミード",nameEn:"Ganymede",age:"3歳",gender:"牝",gc:"#e88aaa",
    sire:"ドレフォン",dam:"シーリア",trainer:"美浦・木村哲也",club:"キャロットクラブ",
    cl:"未勝利",ck:"novice",wins:0,
@@ -734,6 +729,16 @@ function saveSchedules(data){
       }
     }).catch(function(){});
 }
+function autoDeletePastSchedules(data){
+  var tomorrow=new Date(); tomorrow.setHours(0,0,0,0); tomorrow.setDate(tomorrow.getDate()+1);
+  var filtered=data.filter(function(s){ return new Date(s.date)>=tomorrow; });
+  if(filtered.length<data.length){
+    saveSchedules(filtered);
+    return filtered;
+  }
+  return data;
+}
+
 function loadSchedulesFromServer(callback){
   // まずキャッシュで即時表示
   var cached = lsGet("schedules_cache");
@@ -747,6 +752,8 @@ function loadSchedulesFromServer(callback){
   fetch(GAS_URL + '?action=getSchedules')
     .then(function(r){ return r.json(); })
     .then(function(data){
+      // 翌日以降になった予定を自動削除
+      data = autoDeletePastSchedules(data);
       var newStr = JSON.stringify(data);
       var oldStr = lsGet("schedules_cache")||"[]";
       _schedules = data;
@@ -919,12 +926,50 @@ function openSchedPanel(index){
     '</div>'+
     '<div class="divider-sm"></div>'+
     '<div id="del-sched-area">'+
-      '<button onclick="showDelSched('+index+')" style="width:100%;background:transparent;border:1px solid rgba(200,80,80,.3);color:#e05050;padding:8px;font-size:10px;cursor:pointer;border-radius:4px;font-family:Montserrat,sans-serif;letter-spacing:1px;">'+
-        '✕ このスケジュールを削除'+
-      '</button>'+
+      '<div style="display:flex;gap:8px;margin-bottom:8px;">'+
+        '<button onclick="showEditSched('+index+')" style="flex:1;background:transparent;border:1px solid rgba(201,168,76,.4);color:#c9a84c;padding:8px;font-size:10px;cursor:pointer;border-radius:4px;font-family:Montserrat,sans-serif;letter-spacing:1px;">✎ 修正する</button>'+
+        '<button onclick="showDelSched('+index+')" style="flex:1;background:transparent;border:1px solid rgba(200,80,80,.3);color:#e05050;padding:8px;font-size:10px;cursor:pointer;border-radius:4px;font-family:Montserrat,sans-serif;letter-spacing:1px;">✕ 削除する</button>'+
+      '</div>'+
     '</div>';
   document.getElementById("sched-overlay").classList.add("open");
   document.body.style.overflow="hidden";
+}
+
+function showEditSched(index){
+  var s=getSchedules()[index];
+  if(!s) return;
+  document.getElementById("del-sched-area").innerHTML=
+    '<div style="margin-top:4px;display:flex;flex-direction:column;gap:6px;">'+
+      '<input class="t-input" id="es-horse" value="'+s.horse+'" placeholder="馬名">'+
+      '<input class="t-input" id="es-date" type="date" value="'+s.date+'">'+
+      '<input class="t-input" id="es-race" value="'+(s.race||'')+'" placeholder="レース名">'+
+      '<input class="t-input" id="es-dist" value="'+(s.dist||'')+'" placeholder="距離">'+
+      '<input class="t-input" id="es-jockey" value="'+(s.jockey||'')+'" placeholder="騎手">'+
+      '<input class="pw-input" id="es-pw" type="password" placeholder="パスワード" maxlength="10" onkeydown="if(event.key===\'Enter\')doEditSched('+index+')">'+
+      '<div id="es-err" class="pw-err">パスワードが違います</div>'+
+      '<div style="display:flex;gap:8px;">'+
+        '<button onclick="doEditSched('+index+')" style="flex:1;background:#1a4a2a;border:1px solid rgba(201,168,76,.4);color:#c9a84c;padding:8px;font-size:10px;cursor:pointer;border-radius:4px;font-family:Montserrat,sans-serif;">保存する</button>'+
+        '<button onclick="openSchedPanel('+index+')" style="flex:1;background:transparent;border:1px solid rgba(100,120,160,.3);color:#7a8aaa;padding:8px;font-size:10px;cursor:pointer;border-radius:4px;font-family:Montserrat,sans-serif;">戻る</button>'+
+      '</div>'+
+    '</div>';
+  setTimeout(function(){ document.getElementById("es-pw")&&document.getElementById("es-pw").focus(); },100);
+}
+
+function doEditSched(index){
+  if(document.getElementById("es-pw").value!==PASS){
+    document.getElementById("es-err").style.display="block";
+    document.getElementById("es-pw").value=""; return;
+  }
+  var schedules=getSchedules();
+  schedules[index]={
+    horse: document.getElementById("es-horse").value.trim(),
+    date:  document.getElementById("es-date").value,
+    race:  document.getElementById("es-race").value.trim(),
+    dist:  document.getElementById("es-dist").value.trim(),
+    jockey:document.getElementById("es-jockey").value.trim()
+  };
+  saveSchedules(schedules);
+  closeSchedPanel(); renderSchedule(); renderHorseList();
 }
 
 function showDelSched(index){
