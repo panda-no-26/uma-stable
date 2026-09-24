@@ -547,9 +547,35 @@ function renderHorseList(){
     row.className="row";
     row.style.borderLeft="2px solid "+(i<2?"#c9a84c":i<6?"rgba(201,168,76,0.3)":"rgba(201,168,76,0.1)");
     row.style.animation="fadeUp 0.4s "+(i*0.05)+"s both";
-    row.innerHTML=
+
+    // 放牧/入厩ボタン
+    var statusKey="horse_status_"+h.id;
+    var status=lsGet(statusKey)||"放牧";
+    var btnColor=status==="放牧"?"#4a9a4a":"#4a7aaa";
+    var statusBtn=document.createElement("div");
+    statusBtn.style.cssText="display:flex;flex-direction:row;align-items:center;gap:6px;flex-shrink:0;";
+    statusBtn.innerHTML=
       '<div class="row-num">'+h.id+'</div>'+
-      '<div style="flex-shrink:0">'+h.sm()+'</div>'+
+      '<div style="display:flex;flex-direction:column;align-items:center;gap:4px;">'+
+        h.sm()+
+        '<button id="stbtn-'+h.id+'" style="font-family:Montserrat,sans-serif;font-size:9px;font-weight:700;letter-spacing:1px;'+
+          'color:'+btnColor+';border:1.5px solid '+btnColor+';background:transparent;'+
+          'padding:2px 7px;border-radius:3px;cursor:pointer;white-space:nowrap;min-width:44px;">'+
+          status+
+        '</button>'+
+      '</div>';
+    statusBtn.querySelector("button").addEventListener("click",function(e){
+      e.stopPropagation();
+      var cur=lsGet(statusKey)||"放牧";
+      var next=cur==="放牧"?"入厩":"放牧";
+      lsSet(statusKey,next);
+      var c=next==="放牧"?"#4a9a4a":"#4a7aaa";
+      this.textContent=next;
+      this.style.color=c;
+      this.style.borderColor=c;
+    });
+
+    row.innerHTML=
       '<div class="row-info">'+
         '<div class="row-name">'+
           h.nameJp+(s?'<span style="margin-left:4px;font-size:10px">'+s+'</span>':'')+
@@ -563,6 +589,7 @@ function renderHorseList(){
       (raceBadge?'<div style="flex-shrink:0;align-self:center;display:flex;align-items:center;">'+raceBadge+'</div>':'')+
       '<div class="row-class" style="color:'+cs.color+';border:'+cs.border+';align-self:center;">'+h.cl+'</div>'+
       '<div class="row-arrow">›</div>';
+    row.insertAdjacentElement("afterbegin", statusBtn);
     row.onclick=function(){openHorsePanel(h);};
     list.appendChild(row);
   });
