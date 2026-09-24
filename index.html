@@ -374,8 +374,11 @@ body{background:#0a0a0a;color:#e8eaf0;font-family:'Noto Serif JP',serif;min-heig
 // ===== Google Apps Script API =====
 var GAS_URL = 'https://script.google.com/macros/s/AKfycbwTH9JEVDoNFJuSBcnX3fNVf43DsPuekX5qkL0gkn1jTnAmoDYIk1yrjwS8nrbhJxGS7Q/exec';
 var _lsCache = {};
-function lsGet(k){ try{ return lsGet(k); }catch(e){ return _lsCache[k]||null; } }
-function lsSet(k,v){ try{ lsSet(k,v); }catch(e){ _lsCache[k]=v; } }
+function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return _lsCache[k]||null; } }
+function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){ _lsCache[k]=v; } }
+// 放牧/入厩用：cookieで365日保存（localStorageより確実）
+function statusGet(k){ try{ var n=k+"=",ca=document.cookie.split(";"); for(var i=0;i<ca.length;i++){var c=ca[i].trim();if(c.indexOf(n)===0)return decodeURIComponent(c.substring(n.length));} return null; }catch(e){ return _lsCache[k]||null; } }
+function statusSet(k,v){ try{ var d=new Date();d.setTime(d.getTime()+365*864e5);document.cookie=k+"="+encodeURIComponent(v)+";expires="+d.toUTCString()+";path=/;SameSite=Lax"; }catch(e){ _lsCache[k]=v; } }
 var PASS = '5017';
 var _schedules = null;
 var _trophies = null;
@@ -550,7 +553,7 @@ function renderHorseList(){
 
     // 放牧/入厩ボタン
     var statusKey="horse_status_"+h.id;
-    var status=lsGet(statusKey)||"放牧";
+    var status=statusGet(statusKey)||"放牧";
     var btnColor=status==="放牧"?"#4a9a4a":"#4a7aaa";
     var statusBtn=document.createElement("div");
     statusBtn.style.cssText="display:flex;flex-direction:row;align-items:center;gap:6px;flex-shrink:0;";
@@ -566,9 +569,9 @@ function renderHorseList(){
       '</div>';
     statusBtn.querySelector("button").addEventListener("click",function(e){
       e.stopPropagation();
-      var cur=lsGet(statusKey)||"放牧";
+      var cur=statusGet(statusKey)||"放牧";
       var next=cur==="放牧"?"入厩":"放牧";
-      lsSet(statusKey,next);
+      statusSet(statusKey,next);
       var c=next==="放牧"?"#4a9a4a":"#4a7aaa";
       this.textContent=next;
       this.style.color=c;
