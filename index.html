@@ -376,9 +376,24 @@ var GAS_URL = 'https://script.google.com/macros/s/AKfycbwTH9JEVDoNFJuSBcnX3fNVf4
 var _lsCache = {};
 function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return _lsCache[k]||null; } }
 function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){ _lsCache[k]=v; } }
-// 放牧/入厩用：cookieで365日保存（localStorageより確実）
-function statusGet(k){ try{ var n=k+"=",ca=document.cookie.split(";"); for(var i=0;i<ca.length;i++){var c=ca[i].trim();if(c.indexOf(n)===0)return decodeURIComponent(c.substring(n.length));} return null; }catch(e){ return _lsCache[k]||null; } }
-function statusSet(k,v){ try{ var d=new Date();d.setTime(d.getTime()+365*864e5);document.cookie=k+"="+encodeURIComponent(v)+";expires="+d.toUTCString()+";path=/;SameSite=Lax"; }catch(e){ _lsCache[k]=v; } }
+// 放牧/入厩用：GASサーバーに保存（クロスブラウザ・クロスデバイス対応）
+var _horseStatus = {};
+function statusGet(k){ return _horseStatus[k] || "放牧"; }
+function statusSet(k,v){ _horseStatus[k]=v; saveHorseStatusToServer(); }
+function loadHorseStatusFromServer(){
+  fetch(GAS_URL+'?action=getHorseStatus')
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if(data && typeof data==='object'){ _horseStatus=data; }
+      renderHorseList();
+    }).catch(function(){ renderHorseList(); });
+}
+function saveHorseStatusToServer(){
+  fetch(GAS_URL,{
+    method:'POST',
+    body:JSON.stringify({action:'saveHorseStatus',pass:PASS,data:_horseStatus})
+  }).catch(function(){});
+}
 var PASS = '5017';
 var _schedules = null;
 var _trophies = null;
@@ -598,9 +613,8 @@ function renderHorseList(){
   });
 }
 
-renderHorseList();
-
-// 初回読み込み時にサーバーから最新スケジュールを取得して愛馬一覧を更新
+// 初回読み込み：馬状態・スケジュールをサーバーから取得してから描画
+loadHorseStatusFromServer();
 loadSchedulesFromServer(function(){ renderHorseList(); });
 
 // ===== 愛馬パネル =====
