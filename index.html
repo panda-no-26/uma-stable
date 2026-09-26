@@ -378,15 +378,20 @@ function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return _lsCac
 function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){ _lsCache[k]=v; } }
 // 放牧/入厩用：GASサーバーに保存（クロスブラウザ・クロスデバイス対応）
 var _horseStatus = {};
+var _statusLoaded = false;
 function statusGet(k){ return _horseStatus[k] || "放牧"; }
 function statusSet(k,v){ _horseStatus[k]=v; saveHorseStatusToServer(); }
-function loadHorseStatusFromServer(){
+function loadHorseStatusFromServer(callback){
   fetch(GAS_URL+'?action=getHorseStatus')
     .then(function(r){ return r.json(); })
     .then(function(data){
       if(data && typeof data==='object'){ _horseStatus=data; }
-      renderHorseList();
-    }).catch(function(){ renderHorseList(); });
+      _statusLoaded=true;
+      if(callback) callback();
+    }).catch(function(){
+      _statusLoaded=true;
+      if(callback) callback();
+    });
 }
 function saveHorseStatusToServer(){
   fetch(GAS_URL,{
@@ -613,9 +618,13 @@ function renderHorseList(){
   });
 }
 
-// 初回読み込み：馬状態・スケジュールをサーバーから取得してから描画
-loadHorseStatusFromServer();
-loadSchedulesFromServer(function(){ renderHorseList(); });
+// 初回読み込み：馬状態・スケジュールを両方取得してから描画
+var _initDone = {status:false, sched:false};
+function tryInitRender(){
+  if(_initDone.status && _initDone.sched) renderHorseList();
+}
+loadHorseStatusFromServer(function(){ _initDone.status=true; tryInitRender(); });
+loadSchedulesFromServer(function(){ _initDone.sched=true; tryInitRender(); });
 
 // ===== 愛馬パネル =====
 var currentHorseId=null;
